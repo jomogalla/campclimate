@@ -1,0 +1,104 @@
+<html>
+<head>
+	<title>camp climate</title>
+	<link rel="icon"
+  type="image/icon"
+  href="{{ STATIC_URL }}/static/images/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/static/styles.css">
+<script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-ui-1.9.2.custom.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#goButton").click(function(){
+			$("#content").hide();
+			$("#spinner").show();
+			// $.ajax({
+			// 	beforeSend: function () {
+			// 		$("#spinner").style.display = block;
+			// 	},
+			// 	complete: function () {
+
+			// 	},
+			// 	success: function () {
+
+			// 	},
+			// });
+		});
+		$(".infoToggle").click(function(){
+			
+			
+			$(".infoBlob").toggleClass('large');
+			// $(".infoBlob").toggleClass('large', 300);
+			$(".distance").toggle();
+			$(".amenities").toggle();
+			// $(".infoToggle").html('<');
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="page">
+		<div id="header">
+			<form action="" method="get" class="smallForm">
+				{{ form.as_ul }}
+				<input type="submit" value="go" id="goButton" >
+			</form>
+			<div class="campgroundAmount">{{camplist_length|default:"No"}} campground{{camplist_length|pluralize}} returned</div>
+			<span class="infoToggle">more info</span> 
+		</div>
+
+		<p>
+		<div id="content">
+			<div class="notification">
+				{{notification}}
+			</div>
+			{% for infoBlob in zipped %}
+				<div class="infoBlob small">
+					<div class="cityName">
+						{% load humanize %}
+						{{infoBlob.campground.name}}   
+						<span class="distance">
+							{{infoBlob.campground.TYEP}} | 
+							{{infoBlob.distance}} mile{{infoBlob.distance|pluralize}} | 
+							{{infoBlob.campground.phone|default:"No Phone Listed"}} | 
+							{{infoBlob.campground.sites|default:"No Site Data"}} 
+							{%if infoBlob.campground.sites != '' %}
+								site{{infoBlob.campground.sites|pluralize}}
+							{% endif %} | 
+							{{infoBlob.campground.elevation|default:"No Elevation Data"}} 
+							{%if infoBlob.campground.elevation != '' %}
+								ft
+							{% endif %}
+						</span>
+						
+					</div>
+	<!-- 				<span class="cityDistance">
+
+					</span> -->
+					<div class="weatherRow">
+						{% for weatherBlob in infoBlob.weather %}
+							<div class="weatherBlob">
+								<div class="weatherDay">{{weatherBlob.day}}</div>
+								<div class="weatherDate"> {{weatherBlob.date}}</div>
+								<div class="weatherTemps">	High: {{weatherBlob.max_temp.value}} Low: {{weatherBlob.min_temp.value}}</div>
+								<div class="weatherConditions">{{weatherBlob.conditions}}</div>
+
+							</div>
+						{% endfor %}
+					</div>
+					<div class="amenities">
+						<ul>
+						{% for amenity in infoBlob.campground.amenities %}
+							<li>{{amenity}}</li>
+						{% endfor %}
+						</ul>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		<div id="spinner">
+			<img src="{{ STATIC_URL }}/static/images/spin.gif" />
+		</div>
+	</div>
+
+</body>

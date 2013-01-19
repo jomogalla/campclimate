@@ -1,0 +1,171 @@
+<html>
+<head>
+	<title>wahoo</title>
+	<style type="text/css">
+		.errorlist{
+			color: #D86E66;
+			font-weight: normal;
+			position: absolute;
+			font-size: 0.8em;
+			top:0.4em;
+			margin-left: 12em;
+			
+		}
+		.smallForm{
+			margin: 0;
+		}
+		.smallForm input{
+			font-family: 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
+			font-size: 1em;
+			border: 0px;
+			padding:0.2em;
+			box-shadow: 0 0 0.2em #A0714D;
+		}
+		.smallForm li{
+			list-style: none;
+			display: inline;
+			height:1em;
+			line-height: 1em;
+		}
+		.smallForm ul{
+			display: inline;
+		}
+		#header{
+			padding: 0.5em;
+			height: 2em;
+			line-height: 2em;
+			background-color: #848C49;
+			color: #F2F2F2;
+			font-weight: bold;
+			box-shadow: 0 0 0.2em #A0714D;
+		}
+		.goButton{
+			border: 0px;
+			font-size: 1em;
+			border-radius: 2px;
+			font-weight: bold;
+			color: #262121;
+		}
+		#page{
+			margin: 0 auto;
+			/*width: 1005px;*/
+			/*background-color: #f2f2f2;*/
+		}
+		.city{
+			margin: 1em;
+			background-color: #937D4E;
+			border-radius: .5em;
+			color: #f2f2f2;
+			padding: 0.5em;
+		}
+		.infoBlob{
+			margin: 1em;
+			background-color: #937D4E;
+			border-radius: .5em;
+			padding: 0.5em;
+			/*clear:both;*/
+			float:left;
+			display: table;
+		}
+		.weatherBlob{
+			background-color: #f2f2f2;
+			float: left;
+			background-color: #f2f2f2;
+			padding:0.2em;
+			margin: 0.1em;
+			border-radius: 0.2em;
+			color: #262121;
+			text-align: center;
+			box-shadow: 0 0 0.2em #A0714D;
+			/*height: 8.5em;*/
+			/*width: 10em;*/
+		}
+		.cityName{
+			font-weight: bold;
+			font-size: 2em;
+			text-shadow: 0 0 0.2em #A0714D;
+		}
+		.distance{
+			font-weight: normal;
+			font-size: 0.6em;
+
+		}
+		.weatherDate{
+			background-color: #fefefe;
+			font-size: 1.5em;
+			border-bottom: 1px solid #cccccc;
+		}
+		.weatherConditions{
+			font-size: 1.6em;
+		}
+		.notification{
+			padding: 0.5em;
+			padding-left: 1em;
+			font-size: 2em;
+		}
+		.weatherTemps{
+			
+		}
+		#debug{
+			position: fixed;
+			bottom: 0px;
+			left:0px;
+			font-family: "Courier New", Courier, monospace;
+			color: #262121;
+			background-color:rgba(252,252,252,0.85);
+			border-top: 1px #937D4E solid;
+			width: 100%;
+		}
+		#cityNumber{
+			padding: 0.5em 1em 0 1em;
+		}
+		body{
+			font-family: 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
+			color: #262121;
+			margin: 0px;
+		}
+	</style>
+</head>
+<body>
+	<div id="page">
+		<div id="header">
+			<form action="" method="get" class="smallForm">
+				{{ form.as_ul }}
+				<input type="submit" value="go" class="goButton">
+			</form>
+		</div>
+		<span class="notification">
+			{{notification}}
+		</span>
+		<p>
+		{% for infoBlob in zipped %}
+			<div class="infoBlob">
+				<div class="cityName">
+					{% load humanize %}
+					{{infoBlob.city.name}}, {{infoBlob.city.state}}    <span class="distance">{{infoBlob.distance}} mile{{infoBlob.distance|pluralize}} | pop. {{infoBlob.city.population|intcomma}}</span>
+				</div>
+<!-- 				<span class="cityDistance">
+
+				</span> -->
+				{% for weatherBlob in infoBlob.weather %}
+					<div class="weatherBlob">
+						<span class="weatherDate">{{weatherBlob.day}}</span><br> {{weatherBlob.date}}<br>
+						<span class="weatherConditions">{{weatherBlob.conditions}}</span><div class="weatherTemps">
+						High: {{weatherBlob.max_temp.value}}
+						Low: {{weatherBlob.min_temp.value}}
+						</div>
+
+					</div>
+				{% endfor %}
+			</div>
+		{% endfor %}
+	</div>
+	{% if debug.0 %}
+	<div id="debug">
+		{% for debugText in debug %}
+			| {{debugText}}
+		{% endfor %} 
+		
+	</div>
+	{% endif %}
+</body>

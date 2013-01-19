@@ -1,0 +1,36 @@
+Place File Record Layout
+The place file contains data for all incorporated places and census designated places (CDPs) in the 50 states, the District of Columbia and Puerto Rico as of the January 1, 2010. The file is ASCII text, one line per record. Some records contain special characters.
+
+
+
+Column 1	STUSPS	 	United States Postal Service State Abbreviation
+Column 2	GEOID	 	Geographic Identifier - fully concatenated geographic code (State FIPS and Place FIPS)
+Column 3	ANSICODE	American National Standards Insititute code
+Column 4	NAME	 	Name
+Column 5	LSAD	 	Legal/Statistical area descriptor.
+Column 6	FUNCSTAT	Functional status of entity.
+Column 7	POP10	 	2010 Census population count.
+Column 8	HU10	 	2010 Census housing unit count.
+Column 9	ALAND	 	Land Area (square meters) - Created for statistical purposes only.
+Column 10	AWATER	 	Water Area (square meters) - Created for statistical purposes only.
+Column 11	ALAND_SQMI	Land Area (square miles) - Created for statistical purposes only.
+Column 12	AWATER_SQMI	Water Area (square miles) - Created for statistical purposes only.
+Column 13	INTPTLAT	Latitude (decimal degrees) First character is blank or "-" denoting North or South latitude respectively
+Column 14	INTPTLONG	Longitude (decimal degrees) First character is blank or "-" denoting East or West longitude respectively.
+
+
+ZIP Code Tabulation Area File Record Layout
+The ZIP Code Tabulation Area file contains data for all ZIP Code Tabulation Areas (ZCTAs) in the 50 states, the District of Columbia and Puerto Rico as of the January 1, 2010. The file is ASCII text, one line per record.
+
+
+
+Column 1	GEOID		Five digit ZIP Code Tabulation Area Census Code
+Column 2	POP10	 	2010 Census population count.
+Column 3	HU10	 	2010 Census housing unit count.
+Column 4	ALAND	 	Land Area (square meters) - Created for statistical purposes only
+Column 5	AWATER	 	Water Area (square meters) - Created for statistical purposes only
+Column 6	ALAND_SQMI	Land Area (square miles) - Created for statistical purposes only
+Column 7	AWATER_SQMI	Water Area (square miles) - Created for statistical purposes only
+Column 8	INTPTLONG	Longitude (decimal degrees) First character is blank or "-" denoting East or West longitude respectively
+Column 9	INTPTLAT	Latitude (decimal degrees) First character is blank or "-" denoting North or South latitude respectively
+
