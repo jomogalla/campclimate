@@ -24,15 +24,36 @@
 			// 	},
 			// });
 		});
-		$(".infoToggle").click(function(){
-			
-			
-			$(".infoBlob").toggleClass('large');
-			// $(".infoBlob").toggleClass('large', 300);
-			$(".distance").toggle();
-			$(".amenities").toggle();
-			// $(".infoToggle").html('<');
+		$("#infoToggle").toggle(function(){
+			//add all the data
+			$(".infoBlob").addClass('large')
+			$(".amenities").show()
+			$(".distance").show()
+			$("#infoToggle").text('less info')
+			.stop();
+		}, function(){
+			//remove all the data
+			$(".amenities").hide()
+			$(".distance").hide()
+			$(".infoBlob").removeClass('large')
+			$("#infoToggle").text('more info')
+			.stop();
 		});
+		$('#possibleCities li').click(function(){
+			$('#id_location').val($(this).text())
+			$('#goButton').click();
+		});
+
+		// WORKING 
+		// $(".infoToggle").click(function(){
+			
+			
+		// 	$(".infoBlob").toggleClass('large');
+		// 	// $(".infoBlob").toggleClass('large', 300);
+		// 	$(".distance").toggle();
+		// 	$(".amenities").toggle();
+		// 	// $(".infoToggle").html('<');
+		// });
 	});
 </script>
 </head>
@@ -44,13 +65,20 @@
 				<input type="submit" value="go" id="goButton" >
 			</form>
 			<div class="campgroundAmount">{{camplist_length|default:"No"}} campground{{camplist_length|pluralize}} returned</div>
-			<span class="infoToggle">more info</span> 
+			<span id="infoToggle">more info</span> 
 		</div>
 
 		<p>
 		<div id="content">
 			<div class="notification">
 				{{notification}}
+			</div>
+			<div id="possibleCities">
+				<ul>
+				{% for city in possibleCityList %}
+					<li>{{city.name}}, {{city.state}}	</li>
+				{% endfor %}
+				</ul>
 			</div>
 			{% for infoBlob in zipped %}
 				<div class="infoBlob small">
@@ -100,5 +128,4 @@
 			<img src="{{ STATIC_URL }}/static/images/spin.gif" />
 		</div>
 	</div>
-
 </body>

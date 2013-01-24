@@ -7,6 +7,19 @@
 	margin-left: 12em;
 	
 }
+#possibleCities ul li{
+	list-style: none;
+	cursor: pointer;
+	display: inline-block;
+	margin: 1em;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	color: #867246;
+}
+#possibleCities{
+	font-size: 1.3em;
+	/*padding-left: 1em;*/
+}
 .smallForm{
 	margin: 0;
 	display: inline;
@@ -87,7 +100,7 @@
 .large{
 	height: 16em;
 }
-.infoToggle{
+#infoToggle{
 	background-color: #fcfcfc;
 	border-radius: .1em;
 	/*width: 1em;*/
@@ -98,8 +111,8 @@
 	padding: 0.2em;
 	box-shadow: 0 0 0.2em #A0714D;
 	background-color: #BBC18A;
-		position: fixed;
-		right: 1em;
+	position: fixed;
+	right: 1em;
 }
 .weatherRow{
 	height: 10em;

@@ -114,32 +114,16 @@ def index(request):
 		return render_to_response('./index.html', {'form': form, 'debug':debug})
 
 
-	# #GET THE CITIES
-	# #DB ISSUE!!! latitudes & longitudes are crosswired...
-	
-	# #trim cities to cities in a circle(now theyre in a square)
-
-	# #GET THE WEATHER	
-	# allTheForecasts = []
-
-	# # for city in squareCitySet:
-	# # 	tempForecast = oracle.getForecast(city.longitude, city.latitude)
-	# # 	allTheForecasts.append(tempForecast)
-
-	# #need to simplify the weather array for STUPID TEMPLATES
-	# #http://stackoverflow.com/questions/3132706/traversing-multiple-lists-in-django-template-in-same-for-loop
-
-
 def camp(request):
 	debug = []
-	debug.append('False')
+	# debug.append('False')
 	citySet = []
 	if request.method == 'GET':
 		form = WeatherForm(request.GET)
 		if form.is_valid():
 			sampleZip = request.GET['location']
 			maxDistance = int(request.GET['distance'])
-			debug.append('maxdistance: ' + str(maxDistance))
+			# debug.append('maxdistance: ' + str(maxDistance))
 			
 			# switch here to use either the city or the zipcode
 			if len(str(sampleZip)) == 5 and isThisAnInt(sampleZip):
@@ -154,15 +138,19 @@ def camp(request):
 				cityName = ' '.join(parsedZip[0:-1])
 				stateName = parsedZip[-1]
 				debug.append(parsedZip)
-				debug.append(cityName)
-				debug.append(stateName)
+				debug.append('cityname: '+ cityName)
+				debug.append('statename: ' + stateName)
 				try:
 					centerLocation = City.objects.get(name__iexact=cityName, state__iexact=stateName)
 				except ObjectDoesNotExist:
-					# EVENTUALLY GIVE US A LIST OF CITIES!!!
-					# AND SEARCH FOR ADDITIONAL TERMS TO MATCH, -CITY- ETC
-					notification = 'I can\'t seem to find that city'
-					return render_to_response('./camp.html', {'form': form,'notification':notification, 'debug':debug})
+					try:	
+						# NOT WORKING IF OUR CITY HAS A SPACE IN IT
+						possibleCityList = City.objects.filter(name__iexact=stateName)
+						notification = 'I didn\'t catch the state. Here\'s a list of cities to start with: ' 
+						return render_to_response('./camp.html', {'form': form, 'notification':notification, 'possibleCityList':possibleCityList, 'debug':debug})
+					except ObjectDoesNotExist:
+						notification = 'I can\'t seem to find that city'
+						return render_to_response('./camp.html', {'form': form,'notification':notification, 'debug':debug})
 
 			maxLat = centerLocation.latitude + maxDistance/69.09
 			minLat = centerLocation.latitude - maxDistance/69.09
@@ -217,9 +205,6 @@ def camp(request):
 		form = WeatherForm()
 		return render_to_response('./camp.html', {'form': form, 'debug':debug})
 
-
-
-# bug trimming wrong cities? seems to happen at 20 miles and not at 30 or 10
 def calculateDistance(cityA, cityB):
 	from math import sin, radians, cos, acos, degrees
 	theDistance = (sin(radians(cityA.latitude)) * sin(radians(cityB.latitude)) +	cos(radians(cityA.latitude)) * cos(radians(cityB.latitude)) * cos(radians(cityB.longitude - cityA.longitude)))
@@ -254,31 +239,29 @@ def campHumanizer(campground):
 	for amenity in amenitiesList:
 		# RV HOOKUPS
 		if amenity == 'NH':
-			humanFriendlyAmenities.append('Hookups: None')
+			humanFriendlyAmenities.append('No Hookups')
 		elif amenity == 'E':
-			humanFriendlyAmenities.append('Hookups: Electric')
+			humanFriendlyAmenities.append('Electric Hookup')
 		elif amenity == 'W':
-			humanFriendlyAmenities.append('Hookups: Water')
+			humanFriendlyAmenities.append('Water Hookup')
 		elif amenity == 'S':
-			humanFriendlyAmenities.append('Hookups: Sewer')
+			humanFriendlyAmenities.append('Sewer Hookup')
 		elif amenity == 'WE':
-			humanFriendlyAmenities.append('Hookups: Water Electric')
+			humanFriendlyAmenities.append('Water & Electric Hookups')
 		elif amenity == 'ES':
-			humanFriendlyAmenities.append('Hookups: Electric Sewer')
+			humanFriendlyAmenities.append('Sewer & Electric Hookups')
 		elif amenity == 'WS':
-			humanFriendlyAmenities.append('Hookups: Water Sewer')
+			humanFriendlyAmenities.append('Water & Sewer Hookups')
 		elif amenity == 'WES':
-			humanFriendlyAmenities.append('Hookups: Water Electric Sewer')
+			humanFriendlyAmenities.append('Water, Electric, & Sewer Hookups')
 		# Sanitary Dump
 		elif amenity == 'DP':
 			humanFriendlyAmenities.append('Sanitary Dump')
 		elif amenity == 'ND':
 			humanFriendlyAmenities.append('No Sanitary Dump')
 		# Max RV Length --- 
-		### NEEDS ADDRESSING
-		### NOT JUST 32 FT but all sorts o' feet. 
-		elif amenity == '32ft':
-			humanFriendlyAmenities.append('32 feet')
+		elif amenity[-2:] == 'ft':
+			humanFriendlyAmenities.append(amenity[:-2] + ' feet')
 		# Toilets
 		elif amenity == 'FT':
 			humanFriendlyAmenities.append('Flush Toilets')
