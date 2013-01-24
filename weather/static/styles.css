@@ -20,6 +20,13 @@
 	font-size: 1.3em;
 	/*padding-left: 1em;*/
 }
+#farther{
+	margin: 0.5em;
+	margin-left: 1em;
+	font-size: 2em;
+	cursor: pointer;
+	color: #867246;
+}
 .smallForm{
 	margin: 0;
 	display: inline;

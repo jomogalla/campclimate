@@ -194,7 +194,7 @@ def camp(request):
 				return render_to_response('./camp.html', {"camplist_length":len(approvedCampSet), 'debug':debug, 'forecasts':allTheForecasts, 'form': form, 'zipped': zipped})
 			else:
 				notification = 'Search farther...'
-				return render_to_response('./camp.html', {'form': form,'notification':notification, 'debug':debug})
+				return render_to_response('./camp.html', {'form': form,'farther':notification, 'debug':debug})
 		else:
 			debug.append('form data is invalid')
 			form = WeatherForm(request.GET)

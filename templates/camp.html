@@ -43,6 +43,10 @@
 			$('#id_location').val($(this).text())
 			$('#goButton').click();
 		});
+		$('#farther').click(function(){
+			$('#id_distance').val(parseInt($('#id_distance').val()) + 10)
+			$('#goButton').click();
+		});
 
 		// WORKING 
 		// $(".infoToggle").click(function(){
@@ -79,6 +83,9 @@
 					<li>{{city.name}}, {{city.state}}	</li>
 				{% endfor %}
 				</ul>
+			</div>
+			<div id="farther">
+				{{farther}}
 			</div>
 			{% for infoBlob in zipped %}
 				<div class="infoBlob small">
