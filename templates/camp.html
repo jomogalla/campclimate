@@ -6,9 +6,10 @@
   href="{{ STATIC_URL }}/static/images/favicon.ico" />
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/static/styles.css">
 <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-ui-1.9.2.custom.min.js"></script>
+<!-- <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-ui-1.9.2.custom.min.js"></script> -->
 <script type="text/javascript">
 	$(function(){
+		// spinning animation hack
 		$("#goButton").click(function(){
 			$("#content").hide();
 			$("#spinner").show();
@@ -24,31 +25,34 @@
 			// 	},
 			// });
 		});
+		// toggling data shown
 		$("#infoToggle").toggle(function(){
 			//add all the data
 			$(".infoBlob").addClass('large')
 			$(".amenities").show()
-			$(".distance").show()
+			// $(".distance").show()
 			$("#infoToggle").text('less info')
 			.stop();
 		}, function(){
 			//remove all the data
 			$(".amenities").hide()
-			$(".distance").hide()
+			// $(".distance").hide()
 			$(".infoBlob").removeClass('large')
 			$("#infoToggle").text('more info')
 			.stop();
 		});
+		// auto search from a city list
 		$('#possibleCities li').click(function(){
 			$('#id_location').val($(this).text())
 			$('#goButton').click();
 		});
+		//auto search further
 		$('#farther').click(function(){
 			$('#id_distance').val(parseInt($('#id_distance').val()) + 10)
 			$('#goButton').click();
 		});
 
-		// WORKING 
+		// WORKING OLD TOGGLE CODE
 		// $(".infoToggle").click(function(){
 			
 			
@@ -88,23 +92,17 @@
 				{{farther}}
 			</div>
 			{% for infoBlob in zipped %}
-				<div class="infoBlob small">
+				<div class="infoBlob">
 					<div class="cityName">
 						{% load humanize %}
 						{{infoBlob.campground.name}}   
-						<span class="distance">
-							{{infoBlob.campground.TYEP}} | 
-							{{infoBlob.distance}} mile{{infoBlob.distance|pluralize}} | 
-							{{infoBlob.campground.phone|default:"No Phone Listed"}} | 
-							{{infoBlob.campground.sites|default:"No Site Data"}} 
-							{%if infoBlob.campground.sites != '' %}
-								site{{infoBlob.campground.sites|pluralize}}
-							{% endif %} | 
-							{{infoBlob.campground.elevation|default:"No Elevation Data"}} 
-							{%if infoBlob.campground.elevation != '' %}
-								ft
-							{% endif %}
+						<span class="type">
+							{{infoBlob.campground.TYEP}}
 						</span>
+						<span class="distance">
+							{{infoBlob.distance}} mile{{infoBlob.distance|pluralize}}
+						</span>
+
 						
 					</div>
 	<!-- 				<span class="cityDistance">
@@ -126,6 +124,15 @@
 						{% for amenity in infoBlob.campground.amenities %}
 							<li>{{amenity}}</li>
 						{% endfor %}
+						{{infoBlob.campground.phone|default:"No Phone Listed"}} | 
+						{{infoBlob.campground.sites|default:"No Site Data"}} 
+						{%if infoBlob.campground.sites != '' %}
+							site{{infoBlob.campground.sites|pluralize}}
+						{% endif %} | 
+						{{infoBlob.campground.elevation|default:"No Elevation Data"}} 
+						{%if infoBlob.campground.elevation != '' %}
+							ft
+						{% endif %}
 						</ul>
 					</div>
 				</div>
@@ -134,5 +141,11 @@
 		<div id="spinner">
 			<img src="{{ STATIC_URL }}/static/images/spin.gif" />
 		</div>
+			<div id="debug">
+		{% for debugText in debug %}
+			| {{debugText}}
+		{% endfor %} 
+		
+	</div>
 	</div>
 </body>

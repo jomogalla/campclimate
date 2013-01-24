@@ -144,7 +144,9 @@ def camp(request):
 					centerLocation = City.objects.get(name__iexact=cityName, state__iexact=stateName)
 				except ObjectDoesNotExist:
 					try:	
-						# NOT WORKING IF OUR CITY HAS A SPACE IN IT
+						# concatenates the city and state name, if a city is two words, it mixes things up, this fixes that
+						if len(stateName) > 2 and len(cityName) != 0:
+							stateName = cityName + ' ' +stateName
 						possibleCityList = City.objects.filter(name__iexact=stateName)
 						notification = 'I didn\'t catch the state. Here\'s a list of cities to start with: ' 
 						return render_to_response('./camp.html', {'form': form, 'notification':notification, 'possibleCityList':possibleCityList, 'debug':debug})
@@ -218,20 +220,58 @@ def isThisAnInt(s):
 		return False
 
 def campHumanizer(campground):
-	if campground.TYEP == 'NF':
+	# US Federal Campgrounds
+	if campground.TYEP == 'NP':
+		campground.TYEP = 'National Park'
+	elif campground.TYEP == 'NF':
 		campground.TYEP = 'National Forest'
-	elif campground.TYEP == 'SP':
-		campground.TYEP = 'State Park'
-	elif campground.TYEP == 'CP':
-		campground.TYEP = 'City Park'
 	elif campground.TYEP == 'BLM':
 		campground.TYEP = 'Bureau of Land Management'
-	elif campground.TYEP == 'NP':
-		campground.TYEP = 'National Park'
-	elif campground.TYEP == 'SRA':
-		campground.TYEP = 'State Recreation Area'
+	elif campground.TYEP == 'TVA':
+		campground.TYEP = 'Tennessee Valley Auth'
+	elif campground.TYEP == 'COE':
+		campground.TYEP = 'Army Corps of Engineers'
+	elif campground.TYEP == 'NS':
+		campground.TYEP = 'National Seashore'
+	elif campground.TYEP == 'NRA':
+		campground.TYEP = 'National Recreation Area'
+	elif campground.TYEP == 'USFW':
+		campground.TYEP = 'US Fish and Wildlife'
+	elif campground.TYEP == 'WMA':
+		campground.TYEP = 'Wildlife Management Area'
 	elif campground.TYEP == 'MIL':
 		campground.TYEP = 'Military (No Public)'
+	elif campground.TYEP == 'COE':
+		campground.TYEP = 'Corps of Engineers'
+	elif campground.TYEP == 'BOR':
+		campground.TYEP = 'Bureau of Reclamation'
+	
+
+	# US State
+	elif campground.TYEP == 'SP':
+		campground.TYEP = 'State Park'
+	elif campground.TYEP == 'SF':
+		campground.TYEP = 'State Forest'
+	elif campground.TYEP == 'SRA':
+		campground.TYEP = 'State Recreation Area'
+	elif campground.TYEP == 'SPR':
+		campground.TYEP = 'State Preserve'
+	elif campground.TYEP == 'SB':
+		campground.TYEP = 'State Beach'
+	elif campground.TYEP == 'SPR':
+		campground.TYEP = 'State Preserve'
+	elif campground.TYEP == 'SFW':
+		campground.TYEP = 'State Fish & Wildlife'
+
+		# Other
+	elif campground.TYEP == 'CP':
+		campground.TYEP = 'City Park'
+	elif campground.TYEP == 'UTIL':
+		campground.TYEP = 'Utility-owned'
+	elif campground.TYEP == 'RES':
+		campground.TYEP = 'Native American Reservation'
+	elif campground.TYEP == 'AUTH':
+		campground.TYEP = 'Authority'
 
 	#format the amenities to be human friendly
 	amenitiesList = campground.amenities.split()
