@@ -6,7 +6,7 @@
   href="{{ STATIC_URL }}/static/images/favicon.ico" />
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/static/styles.css">
 <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-1.8.3.min.js"></script>
-<!-- <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-ui-1.9.2.custom.min.js"></script> -->
+<script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-ui-1.9.2.custom.min.js"></script>
 <script type="text/javascript">
 	$(function(){
 		// spinning animation hack
@@ -25,11 +25,11 @@
 			// 	},
 			// });
 		});
-		// toggling data shown
+		// showing data
 		$("#infoToggle").toggle(function(){
 			//add all the data
-			$(".infoBlob").addClass('large')
-			$(".amenities").show()
+			$(".infoBlob").addClass('large',250,'easeOutCirc',function(){$(".amenities").show();})
+			
 			// $(".distance").show()
 			$("#infoToggle").text('less info')
 			.stop();
@@ -37,7 +37,7 @@
 			//remove all the data
 			$(".amenities").hide()
 			// $(".distance").hide()
-			$(".infoBlob").removeClass('large')
+			$(".infoBlob").removeClass('large',250,'easeInCirc')
 			$("#infoToggle").text('more info')
 			.stop();
 		});
@@ -84,7 +84,11 @@
 			<div id="possibleCities">
 				<ul>
 				{% for city in possibleCityList %}
-					<li>{{city.name}}, {{city.state}}	</li>
+					<li>{{city.name}}, {{city.state}}	
+					{% if sameCities %}
+						- Population: {{city.population}}
+					{% endif %}
+					</li>
 				{% endfor %}
 				</ul>
 			</div>
@@ -141,5 +145,12 @@
 		<div id="spinner">
 			<img src="{{ STATIC_URL }}/static/images/spin.gif" />
 		</div>
+		{% if debugSwitch %}
+			<div id="debug">
+				{% for debugText in debug %}
+					| {{debugText}}
+				{% endfor %}
+			</div>
+		{% endif %}
 	</div>
 </body>

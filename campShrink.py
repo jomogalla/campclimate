@@ -88,7 +88,8 @@ for unedited in uneditedlist:
 			# print row[-7]
 
 			# phone numbers
-			edited.write(row[-6].replace(' ', ''))
+			edited.write(row[-6].replace(' ', '').replace('-','.'))
+			# edited.write(row[-6].replace(' ', '').replace(u'SQUIGGLY',''))
 			edited.write(',')
 			# print row[-6]
 

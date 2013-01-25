@@ -213,7 +213,7 @@
 213,64.903,-146.373,CHEN,Chena River State Rec Area,SRA,907.451.2695, ,3 campgrounds along same road,75,,NH FT DW NR 
 214,64.84,-147.81,CHER,Chena River State Rec Site,SRA,907.451.2695, ,in town Fairbanks,60,,WE FT DW NR 
 215,47.398,-123.601,CHET,Chetwoot,NF,/360.956.2300, , ,8,984,NR 
-216,48.28,-117.715,CHEL,Chewelah City Park,CP,509.935.8311˜, ,noisy,14,1673,WE ND NS L$ 
+216,48.28,-117.715,CHEL,Chewelah City Park,CP,509.935.8311, ,noisy,14,1673,WE ND NS L$ 
 217,48.678,-120.134,CHEW,Chewuch,NF,509.996.4003/509.664.9200, , ,12,2326,NH ND 35ft NS NR N$ 
 218,43.546,-119.612,CHIC,Chickahominy Reservoir,BLM,541.573.4400,all year, ,,4298,NH ND DW NS NR L$ 
 219,42.85,-123.16,CHIE,Chief Miwaleta,CP,541.837.3302, , ,30,,E DP NS RS 
@@ -269,7 +269,7 @@
 269,43.462,-122.007,CONT,Contorta Flat,NF,541.433.3200/541.383.5300, , ,15,4882,NH ND NS NR 
 270,43.233,-122.872,COOL,Coolwater,NF,541.496.3532/541.957.3200, , ,7,1417,NH ND NS NR 
 271,60.484,-149.888,COOP,Cooper Creek Trailhead,NF,907.224.3374/907.743.9500,early jun-late aug, ,34,,NH RS 
-272,44.973,-116.857,COPP,Copperfield Park,UTIL,˜800.422.3143, , ,62,1722,WE DP DW SH 
+272,44.973,-116.857,COPP,Copperfield Park,UTIL,800.422.3143, , ,62,1722,WE DP DW SH 
 273,47.656,-124.198,COPP,Coppermine Bottom- State Forest,SF,360.374.2800,see agency web site for open/closed status, ,11,223,NH ND VT NW NS NR PA 
 274,42.458,-120.782,CORR,Corral Creek,NF,541.353.2427/541.947.2151, , ,6,6017,NR 
 275,46.969,-119.311,CORR,Corral Lake - WDFW,SFW,, ,Fish/Wildlife sites may have few facilitiies,,,NH ND VT NS NR N$ 
@@ -491,7 +491,7 @@
 491,44.976,-118.242,GRAN,Grande Ronde Lake,NF,541.426.4476/541.523.6391, , ,8,7211,NH ND NS NR 
 492,48.566,-121.805,GRAN,Grandy Lake Campground,CP,360.853.8808, ,primitive ,20,,NH ND PT NS 
 493,60.725,-149.292,GRAN,Granite Creek,NF,907.783.3242/907.743.9500,early jun-late aug, ,19,,NH RS 
-494,44.421,-118.952,GRAC,Grant County RV Park,CP,541.575.1900˜, , ,,3064,E ND NS 
+494,44.421,-118.952,GRAC,Grant County RV Park,CP,541.575.1900, , ,,3064,E ND NS 
 495,47.941,-120.926,GRAS,Grasshopper Meadows,NF,509.548.6977/509.664.9200, , ,5,2110,NR 
 496,42.553,-123.919,GRAS,Grassy Flats,NF,541.471.6500/541.618.2200, , ,5,4534,NR 
 497,47.573,-123.578,GRAV,Graves Creek,NP,360.365.3130, , ,,577,NH ND 21ft NS NR L$ 
@@ -555,7 +555,7 @@
 555,43.453,-124.275,HORF,Horsfall Beach OHV,NF,541.563.3211/541.750.7000,all year,mainly OHV,35,,NH ND DW NS RS PA 
 556,43.718,-121.201,HOTS,Hot Springs,NF,541.383.4000/541.383.5300, , ,80,6421,NH ND 26ft NS NR 
 557,44.392,-122.244,HOUS,House Rock,NF,541.367.5168/541.225.6300, , ,24,1778,NH ND NS NR 
-558,48.484,-121.598,HOWA,Howard Miller Steelhead County Park,CP,360.853.8808˜, , ,65,,WE DP DW SH 
+558,48.484,-121.598,HOWA,Howard Miller Steelhead County Park,CP,360.853.8808, , ,65,,WE DP DW SH 
 559,49,-121.065,HOZO,Hozomeen  - North Cascades National Park,NP,, ,rough road - access is from Canada only,75,1608,NH ND 25ft VT NS NR 
 560,45.563,-117.91,HUNA,Hu - Na - Ha RV Park,CP,541.437.2253, , ,44,2651,WES DW SH 
 561,42.876,-122.337,HUCK,Huckleberry City,NF,541.865.2700/541.618.2200, , ,25,5545,NH ND NS NR 
@@ -2575,7 +2575,7 @@
 2575,39.788,-111.731,BEAC,Bear Canyon,NF,801.342.5260/801.342.5100,mid may-late aug, ,6,6690,NH ND NW NS RS 
 2576,39.788,-111.731,BEAR,Bear Canyon,NF,, ,no RVs,6,6647,NH ND NS NR 
 2577,39.393,-111.099,BECR,Bear Creek,CP,, ,pretty canyon - wooded,29,,W ND FT DW RS L$ 
-2578,39.654,-105.177,BEAR,Bear Creek Lake Park,CP,303.697.6159˜, , ,52,5682,E ND 50ft VT DW NS 
+2578,39.654,-105.177,BEAR,Bear Creek Lake Park,CP,303.697.6159, , ,52,5682,E ND 50ft VT DW NS 
 2579,37.326,-105.143,BEA1,Bear Lake,NF,719.269.8500/719.545.8737,mid may-mid sep, ,14,10489,NH ND 40ft VT DW NS NR 
 2580,40.045,-107.07,BEA2,Bear Lake,NF,719.269.8500/719.545.8737, , ,43,9757,NH ND 30ft VT DW NS NR L$ 
 2581,40.91,-110.83,BEAR,Bear River,NF,307.789.3194/801.236.3400,mid may-mid sep, ,4,8332,NH ND VT DW NS NR L$ 
@@ -3317,7 +3317,7 @@
 3317,37.975,-108.334,MIRA,Miramonte Reservoir - SWA,SFW,,all year,Fish/Wildlife sites may have few facilitiies,50,7707,VT DW NR N$ 
 3318,40.701,-110.885,MIRR,Mirror Lake,NF,435.783.4338/801.236.3400,mid jul-late aug, ,79,10056,NH ND 40ft VT DW NS RS PA 
 3319,38.747,-106.432,MIRR,Mirror Lake - Almont,NF,970.641.0471/970.874.6600,mid may-mid sep, ,10,11017,NH ND 16ft VT DW NS NR L$ 
-3320,40.43,-104.863,MISS,Missile Site Park,CP,970. 304.6531, , ,12,,NH VT DW NR L$ 
+3320,40.43,-104.863,MISS,Missile Site Park,CP,970.304.6531, , ,12,,NH VT DW NR L$ 
 3321,36.981,-110.113,MITT,Mitten View - Monument Valley,RES,, , ,100,5607,NH DP 35ft FT DW L$ 
 3322,37.003,-110.166,MITT,Mitten View Campground,RES,, ,monument valley - unknown facilities,99,,DP SH L$ 
 3323,37.358,-106.547,MIXL,Mix Lake,NF,719.274.8971/719-852-5941, , ,22,10108,NH ND 22ft VT DW NS NR 
@@ -4867,7 +4867,7 @@
 4867,37.335,-119.155,SAMP,Sample Meadow,NF,559.855.5355/559.297.0706, , ,13,7871,NH ND VT NW NS NR N$ 
 4868,38.024,-122.739,SAMU,Samuel Taylor State Park,SP,415.488.9897,mid may-late dec, ,60,223,NH DP 31ft FT DW SH RS 
 4869,34.803,-120.515,SANA,San Antonio Military - Vandenberg AFB,MIL,805.606.8579, ,military only - do not use our lat/lon - contact them for directions and info,,,RS 
-4870,33.407,-117.602,SANC,San Clemente State Beach,SB,949.492.3156˜,all year, ,160,138,NH DP 30ft FT DW SH RS PA 
+4870,33.407,-117.602,SANC,San Clemente State Beach,SB,949.492.3156,all year, ,160,138,NH DP 30ft FT DW SH RS PA 
 4871,34.174,-116.867,SANG,San Gorgonio,NF,909.382.2790/909.382.2600,early may-late sep, ,54,6535,NH ND FT DW SH RS 
 4872,36.207,-121.153,SANR,San Lorenzo,CP,831.755.4895, , ,,295,E DP FT DW SH 
 4873,33.407,-117.585,SANO,San Mateo  - San Onofre State Beach,SB,949.492.4872,all year, ,159,85,E DP SH RS 
@@ -5975,7 +5975,7 @@
 5975,39.721,-92.041,SHEL,Shelbina Lake City Park,CP,573.588.4755, , ,,,WES DP FT DW 
 5976,46.713,-85.064,SHLD,Shelldrake Dam - State Forest,SF,,all year,open all year but snow may block,18,,NH ND NS NR 
 5977,46.487,-84.418,SHER,Sherman City Park,CP,906.635.5075, , ,,,NH ND DW SH 
-5978,39.179,-89.471,SHER,Sherwood Forest,CP,217.532.5211˜, , ,,,E DP DW SH L$ 
+5978,39.179,-89.471,SHER,Sherwood Forest,CP,217.532.5211, , ,,,E DP DW SH L$ 
 5979,45.239,-84.171,SHOE,Shoepac Lake - State Forest,SF,989.785.4251,all year,open all year but snow may block,28,,NH NR 
 5980,44.822,-84.479,SHUP,Shupac Lake - State Forest,SF,989.348.6371,all year,open all year but snow may block,30,,NH NR 
 5981,39.896,-90.955,SILO,Siloam Springs State Park,SP,217.894.6205,all year, ,180,,E DP 40ft SH RS PA 
@@ -6533,7 +6533,7 @@
 6533,41.464,-98.703,COUC,County Campground - Scotia,CP,,all year, ,10,,WE FT DW L$ 
 6534,45.679,-92.876,COUN,County O Landing - St. Croix National Scenic River,NP,715.483.2274, ,primitive,,,NH ND PT DW NS NR 
 6535,39.781,-97.893,COUR,Courtland City Park,CP,, , ,5,,NH ND FT DW NS N$ 
-6536,44.561,-100.493,COWC,Cow Creek State Rec Area,SRA,605.223.7722˜,all year, ,40,1631,E ND DW SH RS L$ 
+6536,44.561,-100.493,COWC,Cow Creek State Rec Area,SRA,605.223.7722,all year, ,40,1631,E ND DW SH RS L$ 
 6537,42.687,-103.417,CRAW,Crawford City Park,CP,, , ,4,,E DP N$ 
 6538,42.275,-95.601,CRAW,Crawford Creek County Rec Area,CP,, ,3 campgrounds,24,,E DP DW SH 
 6539,37.644,-94.813,CRAW,Crawford State Park,SP,620.362.3671,all year, ,500,,E DP 
@@ -6712,7 +6712,7 @@
 6712,46.66,-92.281,FOND,Fond du Lac City,CP,, , ,,,WES DP FT DW SH 
 6713,43.766,-88.428,FOND,Fondu Lac County Fairground,CP,920.929.3169, , ,,,E DP L$ 
 6714,42.604,-91.908,FONT,Fontana County Park,CP,319.636.2617, , ,55,,E DP DW SH L$ 
-6715,48.175,-97.762,FORD,Fordville Dam and Rec Area,CP,701.229.3317˜˜, , ,45,,WES DP DW SH 
+6715,48.175,-97.762,FORD,Fordville Dam and Rec Area,CP,701.229.3317, , ,45,,WES DP DW SH 
 6716,43.64,-92.212,FORE,Forestville Mystery Cave State Park,SP,,all year, ,,,E DP DW SH RS 
 6717,46.748,-100.839,FORA,Fort Abraham Lincoln State Park,SP,701.667.6340,all year, ,,,E DP 45ft DW SH RS 
 6718,47.986,-104.001,FORB,Fort Buford State Historic Site,CP,701.572.9034, ,unknown facilities - no shade,,,NH 
@@ -7054,7 +7054,7 @@
 7054,43.373,-92.55,LAKE,Lake Hendricks Co Park,CP,641.985.2127, , ,80,,E DP FT DW SH 
 7055,44.505,-96.434,LAKP,Lake Hendricks Park,CP,507.275.3192, , ,27,,E DP DW SH L$ 
 7056,43.988,-97.164,LAKH,Lake Herman State Park,SP,605.256.5003,all year, ,72,1660,E DP DW SH RS 
-7057,45.547,-99.987,LAKW,Lake Hiddenwood State Park,SP,605.845.7112˜,all year, ,15,1780,E ND NS NR L$ 
+7057,45.547,-99.987,LAKW,Lake Hiddenwood State Park,SP,605.845.7112,all year, ,15,1780,E ND NS NR L$ 
 7058,47.53,-100.869,LAKE,Lake Holmes,CP,, ,unknown facilities,,,
 7059,46.048,-99.441,LAHO,Lake Hoskins Park,CP,701.288.3347, ,dispersed,,,E DP VT NW SH L$ 
 7060,41.056,-94.735,LAKE,Lake Icaria Co Park,CP,641.322.4793, ,2 campgrounds,100,,WES DP FT DW SH 
@@ -7168,7 +7168,7 @@
 7168,42.277,-93.639,LITW,Little Wall Lake County Park,CP,515.832.9570, , ,104,,E DP DW SH L$ 
 7169,46.632,-97.95,LITY,Little Yellowstone County Park,CP,701.762.4450, , ,,,WES DP 
 7170,41.556,-94.785,LITT,Littlefield Rec Area,CP,, , ,100,,WES DP FT/VT DW SH NR 
-7171,45.774,-102.182,LLEW,Llewellyn Johns  State Rec Area,SRA,605.374.5114˜,all year, ,10,2251,NH ND NS RS 
+7171,45.774,-102.182,LLEW,Llewellyn Johns  State Rec Area,SRA,605.374.5114,all year, ,10,2251,NH ND NS RS 
 7172,48.4,-93.564,LOFG,Lofgren Memorial Park,CP,218.278.6710, , ,12,,E DW SH L$ 
 7173,39.628,-99.579,LOGA,Logan Lake City Park,CP,, , ,,,E 
 7174,41.255,-101.758,LONE,Lone Eagle - Lake McConaughy,SRA,308.284.8800,all year, ,84,,WES DP DW SH RS 
@@ -7426,7 +7426,7 @@
 7426,47.38,-94.516,NORW,Norway Beach,NF,218.835.3104/218.335.8600,early jun-late aug, ,55,,NH DP DW SH RS 
 7427,45.924,-92.64,NORW,Norway Point Landing - St. Croix National Scenic River,NP,715.483.2274, ,primitive,,,NH ND PT DW NS NR 
 7428,44.288,-96.261,NORW,Norwegian Creek Co Park,CP,507.368.9350, , ,92,,WES DP FT DW SH 
-7429,44.692,-92.219,NUGG,Nugget Lake County Park,CP,715.639.5611˜, , ,55,,E DP DW SH 
+7429,44.692,-92.219,NUGG,Nugget Lake County Park,CP,715.639.5611, , ,55,,E DP DW SH 
 7430,41.865,-99.27,NUND,Nunda Shoal - Calamus State Rec Area,SRA,308.346.5666, , ,,,E DP DW SH RS 
 7431,43.059,-96.472,OAKG,Oak Grove Co Park,CP,712.552.1047, ,2 campgrounds,100,,E DP FT DW SH NR 
 7432,43.062,-96.459,OAKG,Oak Grove County Park,CP,712.552.1047, , ,55,,E DP SH 
@@ -7444,7 +7444,7 @@
 7444,41.204,-101.726,OGAL,Ogallala Beach - Lake McConaughy,SRA,308.284.8800,all year, ,,,NH ND NS RS 
 7445,40.411,-97.453,OHIO,Ohiowa RV Park,CP,402.295.2350,early apr-late oct, ,9,,WE FT DW L$ 
 7446,43.241,-97.672,OILV,Oilvet Park,CP,, ,unknown facilities,,,NH ND NS 
-7447,44.568,-100.505,OKOB,Okobojo Point Rec Area,CP,605.223.7722˜, , ,17,1629,NH ND DW SH L$ 
+7447,44.568,-100.505,OKOB,Okobojo Point Rec Area,CP,605.223.7722, , ,17,1629,NH ND DW SH L$ 
 7448,47.871,-96.416,OLDT,Old Crossing Treaty Park,CP,, ,primitive,5,,NH ND FT DW NS NR 
 7449,38.565,-97.673,OLDM,Old Mill - Lindburg,CP,785.227.3595, , ,26,,E L$ 
 7450,48.362,-96.571,OLDM,Old Mill State Park,SP,218.437.8174,all year, ,25,,E ND DW SH RS 
@@ -7974,7 +7974,7 @@
 7974,43.489,-94.614,TUTT,Tuttle Lake Park,CP,712.260.6697, , ,65,,E DP DW SH L$ 
 7975,40.631,-96.971,TUXE,Tuxedo Park,CP,402.826.4315, , ,,,E DP DW SH 
 7976,45.581,-88.137,TWEL,Twelve Foot Falls County Park,CP,715.732.7533, , ,11,,NH L$ 
-7977,46.491,-91.305,TWIR,Twin Bear County Park,CP,715.372.8610˜, , ,,,E DP 
+7977,46.491,-91.305,TWIR,Twin Bear County Park,CP,715.372.8610, , ,,,E DP 
 7978,45.316,-88.197,TWIB,Twin Bridge County Park,CP,715.732.7533, , ,,,E DP DW SH 
 7979,42.818,-91.881,TWIN,Twin Bridges County Park,CP,563.927.3410, , ,45,,WE DP 
 7980,36.802,-94.756,TWIN,Twin Bridges State Rec Area,SP,918.542.6969,all year, ,,,
@@ -9811,7 +9811,7 @@
 9811,29.182,-81.71,JUNI,Juniper Springs,NF,352.625.2520/850.523.8500,all year, ,159,,NH DP DW SH RS PA 
 9812,30.894,-86.645,KARL,Karick Lake Lower - Blackwater River State Forest,SF,850.957.6140,all year, ,,,WE ND FT DW SH RS 
 9813,30.896,-86.641,KARU,Karick Lake Upper  - Blackwater River State Forest,SF,850.957.6140,all year, ,,,WE FT DW SH RS 
-9814,27.316,-97.681,KAUF,Kaufer - Hubert - SeaWind RV Park,CP,361.297.5738˜, , ,134,,WES DP DW SH 
+9814,27.316,-97.681,KAUF,Kaufer - Hubert - SeaWind RV Park,CP,361.297.5738, , ,134,,WES DP DW SH 
 9815,30.408,-88.956,KEES,Keesler AFB Military,MIL,228.377.9050,all year,military only - do not use our lat/lon - contact them for directions and info,52,,WE DP FT DW SH RS 
 9816,28.757,-81.502,KELL,Kelly,CP,407.889.4179, , ,,,E DP DW SH 
 9817,33.29,-94.25,KELC,Kelly Creek Park - Lake Wright Patman,CP,, , ,80,,WES DP DW SH 
@@ -10397,7 +10397,7 @@
 10397,33.024,-85.156,PYNE,Pyne Road Park,CP,706.884.1414, , ,24,,E DP 
 10398,34.957,-93.165,QUAC,Quarry Cove,COE,501.272.4233, , ,,,E DP DW SH NR 
 10399,36.255,-92.242,QUAR,Quarry Cove - Norfolk Lake,COE,479.272.4233,all year, ,,,E DP DW SH RS PA 
-10400,34.944,-94.723,QURI,Quarry Island - Lake Wister State Park,SP,918.655.7212˜˜,all year, ,,,DP DW SH 
+10400,34.944,-94.723,QURI,Quarry Island - Lake Wister State Park,SP,918.655.7212,all year, ,,,DP DW SH 
 10401,34.686,-94.372,QUEE,Queen Wilhelmina State Park,SP,479.394.2863,all year, ,,2488,E RS 
 10402,26.306,-80.153,QUIE,Quiet Waters Park,CP,954.360.1315, ,rent a tent only,,,E 
 10403,35.229,-84.548,QUIN,Quinn Springs Rec Area,NF,423.338.3300/423.476.9700, , ,44,,NH DW SH NR 
@@ -10783,7 +10783,7 @@
 10783,30.017,-97.146,VERN,Vernon L Richards Riverbend Park,CP,512.237.3282, , ,19,,WE DP DW SH 
 10784,34.809,-87.629,VETE,Veterans Memorial Park, ,, , ,,,E DP DW SH 
 10785,33.811,-85.143,VFWC,VFW County Park,CP,770.646.8234, , ,,1084,E DP DW SH 
-10786,34.936,-94.775,VICT,Victor Area - Lake Wister State Park,SP,918.655.7212˜˜,all year, ,,,DP DW SH 
+10786,34.936,-94.775,VICT,Victor Area - Lake Wister State Park,SP,918.655.7212,all year, ,,,DP DW SH 
 10787,34.151,-84.617,VICT,Victoria - Allatoona Lake,COE,678.721.6700,mid mar-late sep, ,,,WES DP DW SH RS PA 
 10788,34.299,-83.159,VICB,Victoria Bryant State Park,SP,706.245.6270,all year, ,,,E DP DW SH RS 
 10789,35.171,-90.727,VILL,Village Creek State Park,SP,870.238.9406,all year, ,,,E DP DW SH RS 
@@ -10808,7 +10808,7 @@
 10808,36.249,-96.281,WALN,Walnut Creek State Park,SP,918.865.4991,all year, ,,,
 10809,36.219,-94.016,WAR,War Eagle - Beaver Lake,COE,479.636.1210, , ,26,1225,E DP DW SH NR 
 10810,34.335,-83.963,WAR,War Hill, ,, , ,,1134,NH 
-10811,34.943,-94.746,WARD,Wards Landing - Lake Wister State Park,SP,918.655.7212˜˜,all year, ,,,DP DW SH 
+10811,34.943,-94.746,WARD,Wards Landing - Lake Wister State Park,SP,918.655.7212,all year, ,,,DP DW SH 
 10812,33.349,-91.126,WARF,Warfield Point Park,CP,662.335.7275, , ,,,E DP DW SH L$ 
 10813,32.593,-83.567,WARN,Warner Robins AFB Military,MIL,, ,military only - do not use our lat/lon - contact them for directions and info,,,RS 
 10814,36.11,-81.294,WARR,Warrior Creek - W. Kerr Scott Reservoir,COE,336.921.2177,mid apr-mid oct, ,91,1134,WE DP DW SH RS PA 
@@ -10833,7 +10833,7 @@
 10833,28.709,-81.463,WEKI,Wekiwa Springs State Park,SP,407.8842008,all year, ,,,E DP 50ft DW SH RS PA 
 10834,30.339,-96.55,WELC,Welch Park - Somerville,CP,, , ,40,,NH FT DW SH 
 10835,33.862,-97.663,WELD,Weldon Rob Memorial Park - Lake Nocona,UTIL,, , ,20,,WE DP 
-10836,29.62,-100.008,WESC,Wes Cooksey County Park,CP,830.597.3223˜, , ,30,1388,WES DP DW SH 
+10836,29.62,-100.008,WESC,Wes Cooksey County Park,CP,830.597.3223, , ,30,1388,WES DP DW SH 
 10837,35.411,-97.114,WESW,Wes Watkins Reservoir,CP,405.964.4507, ,swim  ,62,,WE DP FT DW SH 
 10838,31.117,-97.839,WESF,West Fort Hood RV Military,MIL,254.288.9926, ,military only - do not use our lat/lon - contact them for directions and info,,,RS 
 10839,33.737,-95.929,WESL,West Lake Davy Crockett,NF,940.627.5475/936.639.8501, , ,11,,NH ND VT DW NS NR L$ 
@@ -10866,7 +10866,7 @@
 10866,34.832,-83.626,WIL2,Wildcat 2,NF,706.782.332/770.297.3000, , ,16,2667,NH NR 
 10867,31.874,-100.533,WILD,Wildcat Park - Spence Reservoir,UTIL,325.453.2801, , ,14,1929,WES PT NW 
 10868,35.918,-95.216,WILD,Wildwood - Fort Gibson Lake,COE,918.682.4314,early mar-late oct, ,,,E DP DW SH RS 
-10869,33.639,-82.289,WILD,Wildwood County Park,CP,706.541.3984˜, , ,61,,E DP 
+10869,33.639,-82.289,WILD,Wildwood County Park,CP,706.541.3984, , ,61,,E DP 
 10870,33.896,-96.572,WILW,Willafa Woods - Lake Texoma,COE,, , ,,,NR 
 10871,35.842,-78.744,WILL,William B. Umstead State Park,SP,919.787.3033,mid mar-mid dec, ,,,NH DW SH RS 
 10872,34.417,-87.907,WILL,Williams Hollow,UTIL,256.332.4392, , ,,,E DP SH 

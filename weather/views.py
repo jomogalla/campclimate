@@ -1,14 +1,14 @@
 # from django.db.models import Q
 
 
-#Could not decode to UTF-8 column 'phone' with text '303.697.6159CHARwasHEREbutWAScausingISSUES'
+#Could not decode to UTF-8 column 'phone' with text '303.697.6159CHARACTER' it was character that caused problemos
 #serached for boulder co @ 35
 
 import oracle
 
 import re
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from django.shortcuts import render_to_response
 
@@ -116,7 +116,7 @@ def index(request):
 
 def camp(request):
 	debug = []
-	# debug.append('False')
+	debugSwitch = False
 	citySet = []
 	if request.method == 'GET':
 		form = WeatherForm(request.GET)
@@ -131,7 +131,7 @@ def camp(request):
 					centerLocation = Zips.objects.get(zipcode=sampleZip)
 				except ObjectDoesNotExist:
 					notification = 'You sure that\'s a real zipcode?'
-					return render_to_response('./camp.html', {'form': form,'notification':notification, 'debug':debug})
+					return render_to_response('./camp.html', {'form': form,'notification':notification, 'debugSwitch':debugSwitch, 'debug':debug})
 			else:
 				# assume we werent given a zipcode, so parse it as a city
 				parsedZip = re.findall(r'\w+', sampleZip)
@@ -140,6 +140,7 @@ def camp(request):
 				debug.append(parsedZip)
 				debug.append('cityname: '+ cityName)
 				debug.append('statename: ' + stateName)
+				# BUG: searching two cities...possible major rewrite required to handle searching with extra(no more jQuery hack)
 				try:
 					centerLocation = City.objects.get(name__iexact=cityName, state__iexact=stateName)
 				except ObjectDoesNotExist:
@@ -149,11 +150,17 @@ def camp(request):
 							stateName = cityName + ' ' +stateName
 						possibleCityList = City.objects.filter(name__iexact=stateName)
 						notification = 'I didn\'t catch the state. Here\'s a list of cities to start with: ' 
-						return render_to_response('./camp.html', {'form': form, 'notification':notification, 'possibleCityList':possibleCityList, 'debug':debug})
+						return render_to_response('./camp.html', {'form': form, 'notification':notification, 'possibleCityList':possibleCityList, 'debugSwitch':debugSwitch, 'debug':debug})
 					except ObjectDoesNotExist:
 						notification = 'I can\'t seem to find that city'
-						return render_to_response('./camp.html', {'form': form,'notification':notification, 'debug':debug})
-
+						return render_to_response('./camp.html', {'form': form,'notification':notification, 'debugSwitch':debugSwitch, 'debug':debug})
+				# in case we have two cities with the same name in the same state
+				except MultipleObjectsReturned:
+					# we get cities & populations but, cant specify the search based on the cities GEOid or location
+					possibleCityList = City.objects.filter(state__iexact=stateName).filter(name__iexact=cityName)
+					notification = 'I got multiple cities with that name: clicking these will just mess with things...sorry'
+					sameCities = True
+					return render_to_response('./camp.html', {'form': form,'notification':notification, 'sameCities':sameCities, 'possibleCityList':possibleCityList, 'debugSwitch':debugSwitch,'debug':debug})
 			maxLat = centerLocation.latitude + maxDistance/69.09
 			minLat = centerLocation.latitude - maxDistance/69.09
 			maxLong = centerLocation.longitude + maxDistance/69.09
@@ -193,19 +200,19 @@ def camp(request):
 			# zipped = [{'city': t[0], 'distance':t[1], 'weather': t[2]} for t in zip(citySet, cityDistances, allTheForecasts)]
 			# debug.append(str(len(citySet)) + ' cities')
 			if len(approvedCampSet) > 0:
-				return render_to_response('./camp.html', {"camplist_length":len(approvedCampSet), 'debug':debug, 'forecasts':allTheForecasts, 'form': form, 'zipped': zipped})
+				return render_to_response('./camp.html', {"camplist_length":len(approvedCampSet), 'debugSwitch':debugSwitch, 'debug':debug, 'forecasts':allTheForecasts, 'form': form, 'zipped': zipped})
 			else:
 				notification = 'Search farther...'
-				return render_to_response('./camp.html', {'form': form,'farther':notification, 'debug':debug})
+				return render_to_response('./camp.html', {'form': form,'farther':notification, 'debugSwitch':debugSwitch, 'debug':debug})
 		else:
 			debug.append('form data is invalid')
 			form = WeatherForm(request.GET)
-			return render_to_response('./camp.html', {'form': form, 'debug':debug})
+			return render_to_response('./camp.html', {'form': form, 'debugSwitch':debugSwitch, 'debug':debug})
 
 	else:
 		debug.append('no GET request data')
 		form = WeatherForm()
-		return render_to_response('./camp.html', {'form': form, 'debug':debug})
+		return render_to_response('./camp.html', {'form': form, 'debugSwitch':debugSwitch, 'debug':debug})
 
 def calculateDistance(cityA, cityB):
 	from math import sin, radians, cos, acos, degrees
