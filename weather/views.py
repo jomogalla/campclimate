@@ -149,8 +149,14 @@ def camp(request):
 						if len(stateName) > 2 and len(cityName) != 0:
 							stateName = cityName + ' ' +stateName
 						possibleCityList = City.objects.filter(name__iexact=stateName)
-						notification = 'I didn\'t catch the state. Here\'s a list of cities to start with: ' 
-						return render_to_response('./camp.html', {'form': form, 'notification':notification, 'possibleCityList':possibleCityList, 'debugSwitch':debugSwitch, 'debug':debug})
+						debug.append(len(possibleCityList))
+						if len(possibleCityList) != 0:
+							notification = 'I didn\'t catch the state. Here\'s a list of cities to start with: ' 
+							return render_to_response('./camp.html', {'form': form, 'notification':notification, 'possibleCityList':possibleCityList, 'debugSwitch':debugSwitch, 'debug':debug})
+						else:
+							notification = 'I can\'t find '
+							notification += stateName
+							return render_to_response('./camp.html', {'form': form, 'notification':notification, 'debugSwitch':debugSwitch, 'debug':debug})
 					except ObjectDoesNotExist:
 						notification = 'I can\'t seem to find that city'
 						return render_to_response('./camp.html', {'form': form,'notification':notification, 'debugSwitch':debugSwitch, 'debug':debug})
@@ -345,6 +351,8 @@ def campHumanizer(campground):
 		# Fee
 		elif amenity == 'L$':
 			humanFriendlyAmenities.append('Free or under $12')
+		elif amenity == 'N$':
+			humanFriendlyAmenities.append('No Fee')
 		else:
 			humanFriendlyAmenities.append(str(amenity))
 

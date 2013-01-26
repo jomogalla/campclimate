@@ -128,15 +128,15 @@
 						{% for amenity in infoBlob.campground.amenities %}
 							<li>{{amenity}}</li>
 						{% endfor %}
-						{{infoBlob.campground.phone|default:"No Phone Listed"}} | 
-						{{infoBlob.campground.sites|default:"No Site Data"}} 
+						<li>{{infoBlob.campground.phone|default:"No Phone Listed"}} </li>
+						<li>{{infoBlob.campground.sites|default:"No Site Data"}} </li>
 						{%if infoBlob.campground.sites != '' %}
 							site{{infoBlob.campground.sites|pluralize}}
-						{% endif %} | 
-						{{infoBlob.campground.elevation|default:"No Elevation Data"}} 
+						{% endif %} </li>
+						<li>{{infoBlob.campground.elevation|default:"No Elevation Data"}} 
 						{%if infoBlob.campground.elevation != '' %}
 							ft
-						{% endif %}
+						{% endif %}</li>
 						</ul>
 					</div>
 				</div>
