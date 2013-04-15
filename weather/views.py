@@ -115,8 +115,6 @@ def index(request):
 
 
 def camp(request):
-	debug = []
-	debugSwitch = False
 	citySet = []
 	if request.method == 'GET':
 		form = WeatherForm(request.GET)
@@ -131,15 +129,12 @@ def camp(request):
 					centerLocation = Zips.objects.get(zipcode=sampleZip)
 				except ObjectDoesNotExist:
 					notification = 'You sure that\'s a real zipcode?'
-					return render_to_response('./camp.html', {'form': form,'notification':notification, 'debugSwitch':debugSwitch, 'debug':debug})
+					return render_to_response('./camp.html', {'form': form,'notification':notification})
 			else:
 				# assume we werent given a zipcode, so parse it as a city
 				parsedZip = re.findall(r'\w+', sampleZip)
 				cityName = ' '.join(parsedZip[0:-1])
 				stateName = parsedZip[-1]
-				debug.append(parsedZip)
-				debug.append('cityname: '+ cityName)
-				debug.append('statename: ' + stateName)
 				# BUG: searching two cities...possible major rewrite required to handle searching with extra(no more jQuery hack)
 				try:
 					centerLocation = City.objects.get(name__iexact=cityName, state__iexact=stateName)
@@ -149,24 +144,29 @@ def camp(request):
 						if len(stateName) > 2 and len(cityName) != 0:
 							stateName = cityName + ' ' +stateName
 						possibleCityList = City.objects.filter(name__iexact=stateName)
-						debug.append(len(possibleCityList))
 						if len(possibleCityList) != 0:
 							notification = 'I didn\'t catch the state. Here\'s a list of cities to start with: ' 
-							return render_to_response('./camp.html', {'form': form, 'notification':notification, 'possibleCityList':possibleCityList, 'debugSwitch':debugSwitch, 'debug':debug})
+							return render_to_response('./camp.html', {'form': form, 'notification':notification, 'possibleCityList':possibleCityList})
 						else:
 							notification = 'I can\'t find '
 							notification += stateName
-							return render_to_response('./camp.html', {'form': form, 'notification':notification, 'debugSwitch':debugSwitch, 'debug':debug})
+							return render_to_response('./camp.html', {'form': form, 'notification':notification})
 					except ObjectDoesNotExist:
 						notification = 'I can\'t seem to find that city'
-						return render_to_response('./camp.html', {'form': form,'notification':notification, 'debugSwitch':debugSwitch, 'debug':debug})
+						return render_to_response('./camp.html', {'form': form,'notification':notification})
 				# in case we have two cities with the same name in the same state
 				except MultipleObjectsReturned:
 					# we get cities & populations but, cant specify the search based on the cities GEOid or location
 					possibleCityList = City.objects.filter(state__iexact=stateName).filter(name__iexact=cityName)
 					notification = 'I got multiple cities with that name: clicking these will just mess with things...sorry'
 					sameCities = True
-					return render_to_response('./camp.html', {'form': form,'notification':notification, 'sameCities':sameCities, 'possibleCityList':possibleCityList, 'debugSwitch':debugSwitch,'debug':debug})
+					return render_to_response('./camp.html', {'form': form,'notification':notification, 'sameCities':sameCities, 'possibleCityList':possibleCityList})
+				# Handling Non UTF data that python hates
+				# except OperationalError:
+					# notification = 'I\'ve encountered non-UTF data. And am notifying my superiors\n Sorry about this'
+					# return render_to_response('./camp.html', {'form': form,'notification':notification})
+
+
 			maxLat = centerLocation.latitude + maxDistance/69.09
 			minLat = centerLocation.latitude - maxDistance/69.09
 			maxLong = centerLocation.longitude + maxDistance/69.09
@@ -177,11 +177,9 @@ def camp(request):
 			# trim down the city list to a circle, and build the distance list
 			campDistances = []
 			approvedCampSet = []
-			debug.append('campgrounds before: ' + str(len(citySet)))
 			for campground in campSet:
 				tempDistance = calculateDistance(centerLocation, campground)
-				debug.append(campground.name + ': ' + str(tempDistance))
-				# debug.append(city.name + '- lat:' + str(city.longitude)  + ' long:' + str(city.latitude))
+
 				if tempDistance < float(maxDistance):
 					approvedCampSet.append(campground)
 					campDistances.append(int(tempDistance))
@@ -189,9 +187,6 @@ def camp(request):
 			#format the campground type to be human friendly
 			for campground in approvedCampSet:
 				campground = campHumanizer(campground)
-
-			debug.append('campgrounds after: ' + str(len(approvedCampSet)))
-			debug.append('campground distances: ' + str(len(campDistances)))
 
 			allTheForecasts = []
 			for campground in approvedCampSet:
@@ -206,19 +201,17 @@ def camp(request):
 			# zipped = [{'city': t[0], 'distance':t[1], 'weather': t[2]} for t in zip(citySet, cityDistances, allTheForecasts)]
 			# debug.append(str(len(citySet)) + ' cities')
 			if len(approvedCampSet) > 0:
-				return render_to_response('./camp.html', {"camplist_length":len(approvedCampSet), 'debugSwitch':debugSwitch, 'debug':debug, 'forecasts':allTheForecasts, 'form': form, 'zipped': zipped})
+				return render_to_response('./camp.html', {"camplist_length":len(approvedCampSet), 'forecasts':allTheForecasts, 'form': form, 'zipped': zipped})
 			else:
 				notification = 'Search farther...'
-				return render_to_response('./camp.html', {'form': form,'farther':notification, 'debugSwitch':debugSwitch, 'debug':debug})
+				return render_to_response('./camp.html', {'form': form,'farther':notification})
 		else:
-			debug.append('form data is invalid')
 			form = WeatherForm(request.GET)
-			return render_to_response('./camp.html', {'form': form, 'debugSwitch':debugSwitch, 'debug':debug})
+			return render_to_response('./camp.html', {'form': form})
 
 	else:
-		debug.append('no GET request data')
 		form = WeatherForm()
-		return render_to_response('./camp.html', {'form': form, 'debugSwitch':debugSwitch, 'debug':debug})
+		return render_to_response('./camp.html', {'form': form})
 
 def calculateDistance(cityA, cityB):
 	from math import sin, radians, cos, acos, degrees
@@ -233,6 +226,7 @@ def isThisAnInt(s):
 		return False
 
 def campHumanizer(campground):
+	# print campground.name
 	# US Federal Campgrounds
 	if campground.TYEP == 'NP':
 		campground.TYEP = 'National Park'
@@ -350,7 +344,7 @@ def campHumanizer(campground):
 			humanFriendlyAmenities.append('No Pets Allowed')
 		# Fee
 		elif amenity == 'L$':
-			humanFriendlyAmenities.append('Free or under $12')
+			humanFriendlyAmenities.append('Less than $12')
 		elif amenity == 'N$':
 			humanFriendlyAmenities.append('No Fee')
 		else:

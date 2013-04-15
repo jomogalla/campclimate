@@ -1,9 +1,7 @@
 <html>
 <head>
 	<title>camp climate</title>
-	<link rel="icon"
-  type="image/icon"
-  href="{{ STATIC_URL }}/static/images/favicon.ico" />
+	<link rel="icon" type="image/icon" href="{{ STATIC_URL }}/static/images/favicon.ico" />
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/static/styles.css">
 <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-ui-1.9.2.custom.min.js"></script>
@@ -67,7 +65,7 @@
 </head>
 <body>
 	<div id="page">
-		<div id="header">
+		<div id="banner">
 			<form action="" method="get" class="smallForm">
 				{{ form.as_ul }}
 				<input type="submit" value="go" id="goButton" >
@@ -103,9 +101,12 @@
 						<span class="type">
 							{{infoBlob.campground.TYEP}}
 						</span>
+						<a class="googleMaps" target="_blank" href="https://maps.google.com/maps?q={{infoBlob.campground.latitude}},+{{infoBlob.campground.longitude}}" title="view on google maps"></a>
 						<span class="distance">
 							{{infoBlob.distance}} mile{{infoBlob.distance|pluralize}}
 						</span>
+						
+						<!-- <a href="https://maps.google.com/maps?q=37.771008,+-122.41175+(You+can+insert+your+text+here)&iwloc=A&hl=en"></a> -->
 
 						
 					</div>
@@ -143,7 +144,7 @@
 			{% endfor %}
 		</div>
 		<div id="spinner">
-			<img src="{{ STATIC_URL }}/static/images/spin.gif" />
+			<img src="{{ STATIC_URL }}/static/images/spinTran						.gif" />
 		</div>
 		{% if debugSwitch %}
 			<div id="debug">
