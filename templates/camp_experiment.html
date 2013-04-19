@@ -1,0 +1,146 @@
+{% load dajaxice_templatetags %}
+<html>
+<head>
+	<title>camp climate</title>
+	<link rel="icon" type="image/icon" href="{{ STATIC_URL }}/static/images/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/static/styles_experiment.css">
+	{% dajaxice_js_import %}
+<script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-ui-1.9.2.custom.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		// spinning animation hack
+		$("#goButton").click(function(){
+			$("#content").hide();
+			$("#spinner").show();
+			// $.ajax({
+			// 	beforeSend: function () {
+			// 		$("#spinner").style.display = block;
+			// 	},
+			// 	complete: function () {
+
+			// 	},
+			// 	success: function () {
+
+			// 	},
+			// });
+		});
+		// fill right side up wiht the correct data
+		$(".camp").click(function(){
+			$('#rightDetails').html($('#latitude_' +  $(this).attr('id')).html() + ', ' + $('#longitude_' +  $(this).attr('id')).html()); 
+		});
+		// auto search from a city list
+		$('#possibleCities li').click(function(){
+			$('#id_location').val($(this).text())
+			$('#goButton').click();
+		});
+		//auto search further
+		$('#farther').click(function(){
+			$('#id_distance').val(parseInt($('#id_distance').val()) + 10)
+			$('#goButton').click();
+		});
+	});
+	function my_callback(data){
+    	alert(data.message);
+	}
+	function send_camp(){
+		// alert($(this).attr('id'));
+		// Dajaxice.weather.dajaxice_example(my_callback);
+	}
+
+</script>
+</head>
+<body>
+	<div id="banner">
+		<form action="" method="get" class="smallForm">
+			{{ form.as_ul }}
+			<input type="submit" value="go" id="goButton" >
+		</form>
+		
+	</div>
+	<div id="content">
+		{% if notification %}
+		<div class="notification">
+			{{notification}}
+		</div>
+		{% endif %}
+		{% if possibleCityList %}
+		<div id="possibleCities">
+			<ul>
+			{% for city in possibleCityList %}
+				<li>{{city.name}}, {{city.state}}	
+				{% if sameCities %}
+					- Population: {{city.population}}
+				{% endif %}
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+		{% if farther %}
+		<div id="farther">
+			{{farther}}
+		</div>
+		{% endif %}
+		<div id="leftColumn">
+		{% for infoBlob in zipped %}
+			<div class="camp {% if forloop.last%}last{% endif %}" id="{{forloop.counter0}}" >
+				{% load humanize %}
+				<div class="cityName">{{infoBlob.campground.name}}   </div>
+				<span class="type">
+					{{infoBlob.campground.TYEP}}
+				</span>
+			
+				<span class="distance">
+					~{{infoBlob.distance}} mile{{infoBlob.distance|pluralize}}
+				</span>
+				<span id="latitude_{{forloop.counter0}}" class="hiddenData">{{infoBlob.campground.latitude}}</span>
+				<span id="longitude_{{forloop.counter0}}" class="hiddenData">{{infoBlob.campground.longitude}}</span>
+				
+				<!-- <a href="https://maps.google.com/maps?q=37.771008,+-122.41175+(You+can+insert+your+text+here)&iwloc=A&hl=en"></a> -->	
+			</div>	
+		{% endfor %}
+		</div>
+		<div id="rightColumn">
+			<div id="rightTitle">
+				<span class="campName">{{zipped.0.campground.name}}   </span>
+				<span class="campDistance">	~{{zipped.0.distance}} mile{{zipped.0.distance|pluralize}}</span>
+				<div class="campType">	{{zipped.0.campground.TYEP}}</div>
+			</div>
+			<div id="rightMap">
+				<iframe width="600" height="250" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{zipped.0.campground.latitude}},+{{zipped.0.campground.longitude}}&amp;hl=en&amp;ie=UTF8&amp;t=t&amp;ll={{zipped.0.campground.latitude}},{{zipped.0.campground.longitude}}&amp;spn=0.023746,0.051498&amp;z=12&amp;iwloc=near&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?q={{zipped.0.campground.latitude}},+{{zipped.0.campground.longitude}}&amp;hl=en&amp;ie=UTF8&amp;t=m&amp;ll={{zipped.0.campground.latitude}},{{zipped.0.campground.longitude}}&amp;spn=0.023746,0.051498&amp;z=14&amp;iwloc=A&amp;source=embed" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+			</div>
+			<div id="rightWeather">
+					{% for weatherBlob in zipped.0.weather %}
+						<div class="weatherBlob {% if forloop.last %}last{% endif %}">
+							<div class="weatherDay">{{weatherBlob.day}}</div>
+							<div class="weatherDate"> {{weatherBlob.date}}</div>
+							<div class="weatherTemps">	High: {{weatherBlob.max_temp.value}} Low: {{weatherBlob.min_temp.value}}</div>
+							<div class="weatherConditions">{{weatherBlob.conditions}}</div>
+
+						</div>
+					{% endfor %}
+			</div>
+			<div id="rightDetails">
+				<ul>
+				{% for amenity in zipped.0.campground.amenities %}
+					<li>{{amenity}}</li>
+				{% endfor %}
+				{% if zipped.0.campground.phone %}
+					<li>{{zipped.0.campground.phone}}</li>
+				{% endif %}
+				{% if zipped.0.campground.sites %}
+					<li>{{zipped.0.campground.sites}} site{{zipped.0.campground.sites|pluralize}}</li>
+				{% endif %}
+				{% if zipped.0.campground.elevation %}
+					<li>{{zipped.0.campground.elevation}} ft</li>
+				{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div id="spinner">
+		<img src="{{ STATIC_URL }}/static/images/spinTran						.gif" />
+	</div>
+</body>

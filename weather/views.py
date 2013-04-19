@@ -28,7 +28,7 @@ class WeatherForm(forms.Form):
 	distance = forms.DecimalField(error_messages={'required': 'required'})
 	# lessgreater = forms.BooleanField()
 
-class bigWeatherForm(forms.Form):
+class BigWeatherForm(forms.Form):
 	zipcode = forms.DecimalField(max_digits=5)
 	distance = forms.DecimalField()
 	population = forms.DecimalField()
@@ -37,72 +37,72 @@ class bigWeatherForm(forms.Form):
 def index(request):
 	debug = []
 	debug.append('False')
-	citySet = []
+	city_set = []
 	if request.method == 'GET':
 		form = WeatherForm(request.GET)
 		if form.is_valid():
-			sampleZip = request.GET['location']
-			maxDistance = int(request.GET['distance'])
-			debug.append('maxdistance: ' + str(maxDistance))
+			sample_zip = request.GET['location']
+			max_distance = int(request.GET['distance'])
+			debug.append('max_distance: ' + str(max_distance))
 
 			# switch here to use either the city or the zipcode
-			debug.append('isThisAnInt: ' + str(isThisAnInt(sampleZip)))
-			if len(str(sampleZip)) == 5 and isThisAnInt(sampleZip):
+			debug.append('is_this_an_int: ' + str(is_this_an_int(sample_zip)))
+			if len(str(sample_zip)) == 5 and is_this_an_int(sample_zip):
 				try:
-					centerLocation = Zips.objects.get(zipcode=sampleZip)
+					center_location = Zips.objects.get(zipcode=sample_zip)
 				except ObjectDoesNotExist:
 					notification = 'No zipcode found :('
 					return render_to_response('./index.html', {'form': form,'notification':notification, 'debug':debug})
 			else:
 				# assume we werent given a zipcode, so parse it as a city
-				parsedZip = re.findall(r'\w+', sampleZip)
-				cityName = ' '.join(parsedZip[0:-1])
-				stateName = parsedZip[-1]
-				debug.append(parsedZip)
-				debug.append(cityName)
-				debug.append(stateName)
+				parsed_zip = re.findall(r'\w+', sample_zip)
+				city_name = ' '.join(parsed_zip[0:-1])
+				state_name = parsed_zip[-1]
+				debug.append(parsed_zip)
+				debug.append(city_name)
+				debug.append(state_name)
 				try:
-					centerLocation = City.objects.get(name__iexact=cityName, state__iexact=stateName)
+					center_location = City.objects.get(name__iexact=city_name, state__iexact=state_name)
 				except ObjectDoesNotExist:
 					notification = 'No city found :('
 					return render_to_response('./index.html', {'form': form,'notification':notification, 'debug':debug})
 				# add 3rd except for multiple cites, return links to all of them! 
 				# then do the search for the one they select!
-			maxLat = centerLocation.latitude + maxDistance/69.09
-			minLat = centerLocation.latitude - maxDistance/69.09
-			maxLong = centerLocation.longitude + maxDistance/69.09
-			minLong = centerLocation.longitude - maxDistance/69.09
+			max_lat = center_location.latitude + max_distance/69.09
+			min_lat = center_location.latitude - max_distance/69.09
+			max_long = center_location.longitude + max_distance/69.09
+			min_long = center_location.longitude - max_distance/69.09
 
-			citySet = list(City.objects.filter(longitude__range=(minLong,maxLong)).filter(latitude__range=(minLat,maxLat)))
+			city_set = list(City.objects.filter(longitude__range=(min_long,max_long)).filter(latitude__range=(min_lat,max_lat)))
 
 			# trim down the city list to a circle, and build the distance list
-			cityDistances = []
-			approvedCitySet = []
-			debug.append('cities before: ' + str(len(citySet)))
-			for city in citySet:
-				tempDistance = calculateDistance(centerLocation, city)
-				debug.append(city.name + ': ' + str(tempDistance))
+			city_distances = []
+			approvedcity_set = []
+			debug.append('cities before: ' + str(len(city_set)))
+			for city in city_set:
+				temp_distance = calculate_distance(center_location, city)
+				debug.append(city.name + ': ' + str(temp_distance))
 				# debug.append(city.name + '- lat:' + str(city.longitude)  + ' long:' + str(city.latitude))
-				if tempDistance < float(maxDistance):
-					approvedCitySet.append(city)
-					cityDistances.append(int(tempDistance))
+				if temp_distance < float(max_distance):
+					approvedcity_set.append(city)
+					city_distances.append(int(temp_distance))
 
-			debug.append('cities after: ' + str(len(approvedCitySet)))
-			debug.append('city distances: ' + str(len(cityDistances)))
+			debug.append('cities after: ' + str(len(approvedcity_set)))
+			debug.append('city distances: ' + str(len(city_distances)))
 
-			allTheForecasts = []
-			for city in citySet:
-				tempForecast = oracle.getForecast(city.latitude, city.longitude)
+			all_the_forecasts = []
+			for city in city_set:
+				tempForecast = oracle.get_forecast(city.latitude, city.longitude)
 				#getting the day of the week for dates
 				for datapoint in tempForecast:
 					datapoint.day = datapoint.date.strftime('%A')
 				#add forecast to forecast list
-				allTheForecasts.append(tempForecast)
+				all_the_forecasts.append(tempForecast)
 
-			zipped = [{'city': t[0], 'weather': t[1], 'distance': t[2]} for t in zip(approvedCitySet, allTheForecasts, cityDistances)]
-			# zipped = [{'city': t[0], 'distance':t[1], 'weather': t[2]} for t in zip(citySet, cityDistances, allTheForecasts)]
-			# debug.append(str(len(citySet)) + ' cities')
-			return render_to_response('./index.html', {'city_list':citySet,"citylist_length":len(citySet), 'forecasts':allTheForecasts, 'form': form, 'zipped': zipped, 'debug':debug})
+			zipped = [{'city': t[0], 'weather': t[1], 'distance': t[2]} for t in zip(approvedcity_set, all_the_forecasts, city_distances)]
+			# zipped = [{'city': t[0], 'distance':t[1], 'weather': t[2]} for t in zip(city_set, city_distances, all_the_forecasts)]
+			# debug.append(str(len(city_set)) + ' cities')
+			return render_to_response('./index.html', {'city_list':city_set,"citylist_length":len(city_set), 'forecasts':all_the_forecasts, 'form': form, 'zipped': zipped, 'debug':debug})
 		else:
 			debug.append('form data is invalid')
 			form = WeatherForm(request.GET)
@@ -115,117 +115,119 @@ def index(request):
 
 
 def camp(request):
-	citySet = []
+	city_set = []
 	if request.method == 'GET':
 		form = WeatherForm(request.GET)
 		if form.is_valid():
-			sampleZip = request.GET['location']
-			maxDistance = int(request.GET['distance'])
-			# debug.append('maxdistance: ' + str(maxDistance))
+			sample_zip = request.GET['location']
+			max_distance = int(request.GET['distance'])
+			# debug.append('max_distance: ' + str(max_distance))
 			
 			# switch here to use either the city or the zipcode
-			if len(str(sampleZip)) == 5 and isThisAnInt(sampleZip):
+			if len(str(sample_zip)) == 5 and is_this_an_int(sample_zip):
 				try:
-					centerLocation = Zips.objects.get(zipcode=sampleZip)
+					center_location = Zips.objects.get(zipcode=sample_zip)
 				except ObjectDoesNotExist:
 					notification = 'You sure that\'s a real zipcode?'
-					return render_to_response('./camp.html', {'form': form,'notification':notification})
+					return render_to_response('./camp_experiment.html', {'form': form,'notification':notification})
 			else:
 				# assume we werent given a zipcode, so parse it as a city
-				parsedZip = re.findall(r'\w+', sampleZip)
-				cityName = ' '.join(parsedZip[0:-1])
-				stateName = parsedZip[-1]
+				parsed_zip = re.findall(r'\w+', sample_zip)
+				city_name = ' '.join(parsed_zip[0:-1])
+				state_name = parsed_zip[-1]
 				# BUG: searching two cities...possible major rewrite required to handle searching with extra(no more jQuery hack)
 				try:
-					centerLocation = City.objects.get(name__iexact=cityName, state__iexact=stateName)
+					center_location = City.objects.get(name__iexact=city_name, state__iexact=state_name)
 				except ObjectDoesNotExist:
 					try:	
 						# concatenates the city and state name, if a city is two words, it mixes things up, this fixes that
-						if len(stateName) > 2 and len(cityName) != 0:
-							stateName = cityName + ' ' +stateName
-						possibleCityList = City.objects.filter(name__iexact=stateName)
+						if len(state_name) > 2 and len(city_name) != 0:
+							state_name = city_name + ' ' +state_name
+						possibleCityList = City.objects.filter(name__iexact=state_name)
 						if len(possibleCityList) != 0:
 							notification = 'I didn\'t catch the state. Here\'s a list of cities to start with: ' 
-							return render_to_response('./camp.html', {'form': form, 'notification':notification, 'possibleCityList':possibleCityList})
+							return render_to_response('./camp_experiment.html', {'form': form, 'notification':notification, 'possibleCityList':possibleCityList})
 						else:
 							notification = 'I can\'t find '
-							notification += stateName
-							return render_to_response('./camp.html', {'form': form, 'notification':notification})
+							notification += state_name
+							return render_to_response('./camp_experiment.html', {'form': form, 'notification':notification})
 					except ObjectDoesNotExist:
 						notification = 'I can\'t seem to find that city'
-						return render_to_response('./camp.html', {'form': form,'notification':notification})
+						return render_to_response('./camp_experiment.html', {'form': form,'notification':notification})
 				# in case we have two cities with the same name in the same state
 				except MultipleObjectsReturned:
 					# we get cities & populations but, cant specify the search based on the cities GEOid or location
-					possibleCityList = City.objects.filter(state__iexact=stateName).filter(name__iexact=cityName)
+					possibleCityList = City.objects.filter(state__iexact=state_name).filter(name__iexact=city_name)
 					notification = 'I got multiple cities with that name: clicking these will just mess with things...sorry'
 					sameCities = True
-					return render_to_response('./camp.html', {'form': form,'notification':notification, 'sameCities':sameCities, 'possibleCityList':possibleCityList})
+					return render_to_response('./camp_experiment.html', {'form': form,'notification':notification, 'sameCities':sameCities, 'possibleCityList':possibleCityList})
 				# Handling Non UTF data that python hates
 				# except OperationalError:
 					# notification = 'I\'ve encountered non-UTF data. And am notifying my superiors\n Sorry about this'
-					# return render_to_response('./camp.html', {'form': form,'notification':notification})
+					# return render_to_response('./camp_experiment.html', {'form': form,'notification':notification})
 
 
-			maxLat = centerLocation.latitude + maxDistance/69.09
-			minLat = centerLocation.latitude - maxDistance/69.09
-			maxLong = centerLocation.longitude + maxDistance/69.09
-			minLong = centerLocation.longitude - maxDistance/69.09
+			max_lat = center_location.latitude + max_distance/69.09
+			min_lat = center_location.latitude - max_distance/69.09
+			max_long = center_location.longitude + max_distance/69.09
+			min_long = center_location.longitude - max_distance/69.09
 
-			campSet = list(Campground.objects.filter(longitude__range=(minLong,maxLong)).filter(latitude__range=(minLat,maxLat)))
+			camp_set = list(Campground.objects.filter(longitude__range=(min_long,max_long)).filter(latitude__range=(min_lat,max_lat)))
 
 			# trim down the city list to a circle, and build the distance list
-			campDistances = []
-			approvedCampSet = []
-			for campground in campSet:
-				tempDistance = calculateDistance(centerLocation, campground)
+			camp_distances = []
+			approvedcamp_set = []
+			for campground in camp_set:
+				temp_distance = calculate_distance(center_location, campground)
 
-				if tempDistance < float(maxDistance):
-					approvedCampSet.append(campground)
-					campDistances.append(int(tempDistance))
+				if temp_distance < float(max_distance):
+					approvedcamp_set.append(campground)
+					camp_distances.append(int(temp_distance))
 
 			#format the campground type to be human friendly
-			for campground in approvedCampSet:
-				campground = campHumanizer(campground)
+			for campground in approvedcamp_set:
+				campground = camp_humanizer(campground)
 
-			allTheForecasts = []
-			for campground in approvedCampSet:
-				tempForecast = oracle.getForecast(campground.latitude, campground.longitude)
+			all_the_forecasts = []
+			for campground in approvedcamp_set:
+				tempForecast = oracle.get_forecast(campground.latitude, campground.longitude)
 				#getting the day of the week for dates
 				for datapoint in tempForecast:
 					datapoint.day = datapoint.date.strftime('%A')
 				#add forecast to forecast list
-				allTheForecasts.append(tempForecast)
+				all_the_forecasts.append(tempForecast)
 
-			zipped = [{'campground': t[0], 'weather': t[1], 'distance': t[2]} for t in zip(approvedCampSet, allTheForecasts, campDistances)]
-			# zipped = [{'city': t[0], 'distance':t[1], 'weather': t[2]} for t in zip(citySet, cityDistances, allTheForecasts)]
-			# debug.append(str(len(citySet)) + ' cities')
-			if len(approvedCampSet) > 0:
-				return render_to_response('./camp.html', {"camplist_length":len(approvedCampSet), 'forecasts':allTheForecasts, 'form': form, 'zipped': zipped})
+			zipped = [{'campground': t[0], 'weather': t[1], 'distance': t[2]} for t in zip(approvedcamp_set, all_the_forecasts, camp_distances)]
+			# zipped = [{'city': t[0], 'distance':t[1], 'weather': t[2]} for t in zip(city_set, city_distances, all_the_forecasts)]
+			# debug.append(str(len(city_set)) + ' cities')
+			if len(approvedcamp_set) > 0:
+				return render_to_response('./camp_experiment.html', {"camplist_length":len(approvedcamp_set), 'forecasts':all_the_forecasts, 'form': form, 'zipped': zipped})
 			else:
 				notification = 'Search farther...'
-				return render_to_response('./camp.html', {'form': form,'farther':notification})
+				return render_to_response('./camp_experiment.html', {'form': form,'farther':notification})
 		else:
 			form = WeatherForm(request.GET)
-			return render_to_response('./camp.html', {'form': form})
+			return render_to_response('./camp_experiment.html', {'form': form})
 
 	else:
 		form = WeatherForm()
-		return render_to_response('./camp.html', {'form': form})
+		return render_to_response('./camp_experiment.html', {'form': form})
 
-def calculateDistance(cityA, cityB):
+
+
+def calculate_distance(cityA, cityB):
 	from math import sin, radians, cos, acos, degrees
 	theDistance = (sin(radians(cityA.latitude)) * sin(radians(cityB.latitude)) +	cos(radians(cityA.latitude)) * cos(radians(cityB.latitude)) * cos(radians(cityB.longitude - cityA.longitude)))
 	return degrees(acos(theDistance)*69.09)
 
-def isThisAnInt(s):
+def is_this_an_int(s):
 	try:
 		int(s)
 		return True
 	except ValueError:
 		return False
 
-def campHumanizer(campground):
+def camp_humanizer(campground):
 	# print campground.name
 	# US Federal Campgrounds
 	if campground.TYEP == 'NP':
@@ -353,26 +355,26 @@ def campHumanizer(campground):
 	campground.amenities = humanFriendlyAmenities
 
 
-# def calculateDistance(cityA, cityB):
+# def calculate_distance(cityA, cityB):
 # 	from math import sin, radians, cos, acos, degrees
 # 	theDistance = (sin(radians(cityA.longitude)) * sin(radians(cityB.longitude)) +	cos(radians(cityA.longitude)) * cos(radians(cityB.longitude)) * cos(radians(cityB.latitude - cityA.latitude)))
 # 	return int(degrees(acos(theDistance)) * 69.09)
 
-	# sampleZip = 97306
+	# sample_zip = 97306
 	# distance = 10
 
-	# centerLocation = Zips.objects.get(zipcode=sampleZip)
-	# maxLat = centerLocation.latitude + distance/69.09
-	# minLat = centerLocation.latitude - distance/69.09
-	# maxLong = centerLocation.longitude + distance/69.09
-	# minLong = centerLocation.longitude - distance/69.09
+	# center_location = Zips.objects.get(zipcode=sample_zip)
+	# max_lat = center_location.latitude + distance/69.09
+	# min_lat = center_location.latitude - distance/69.09
+	# max_long = center_location.longitude + distance/69.09
+	# min_long = center_location.longitude - distance/69.09
 
-	# squareCitySet = City.objects.filter(longitude__range=(minLat,maxLat)).filter(latitude__range=(minLong,maxLong))
+	# squarecity_set = City.objects.filter(longitude__range=(min_lat,max_lat)).filter(latitude__range=(min_long,max_long))
 	# # t = loader.get_template('../templates/index.html')
-	# # c = Context({'city_list':squareCitySet,"center_lat":centerLocation.latitude, "max_lat":maxLat, "min_lat":minLat, "citylist_length":len(squareCitySet), "forecasts":allTheForecasts})
+	# # c = Context({'city_list':squarecity_set,"center_lat":center_location.latitude, "max_lat":max_lat, "min_lat":min_lat, "citylist_length":len(squarecity_set), "forecasts":all_the_forecasts})
 	# # return HttpResponse(t.render(c))
-	# return render_to_response('../templates/index.html', {'city_list':squareCitySet,"citylist_length":len(squareCitySet), "forecasts":allTheForecasts,})
-	# # return render_to_response('../templates/index.html', {'city_list':squareCitySet,"center_lat":centerLocation.latitude, "max_lat":maxLat, "min_lat":minLat, "citylist_length":len(squareCitySet), "forecasts":allTheForecasts})
+	# return render_to_response('../templates/index.html', {'city_list':squarecity_set,"citylist_length":len(squarecity_set), "forecasts":all_the_forecasts,})
+	# # return render_to_response('../templates/index.html', {'city_list':squarecity_set,"center_lat":center_location.latitude, "max_lat":max_lat, "min_lat":min_lat, "citylist_length":len(squarecity_set), "forecasts":all_the_forecasts})
 
 # HERE IS THE CODE FROM BETTERWEATHER THAT GETS THE CITIES, BITCH
 #for(int i = 0; i < cityBeans.size(); i++)

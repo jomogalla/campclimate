@@ -14,12 +14,12 @@ from noaa import utils
 # latLongs = []
 
 # latLongs.append(latLong)
-# allTheForecasts = []
+# all_the_forecasts = []
 
-# # takes a list(latLongs) of lats & longs and returns the forecasts in a list(allTheForecasts)
-# for tempLatLong in latLongs:
-# 	tempForecast = forecast.daily_forecast_by_lat_lon(tempLatLong[0], tempLatLong[1])
-# 	allTheForecasts.append(tempForecast)
+# # takes a list(latLongs) of lats & longs and returns the forecasts in a list(all_the_forecasts)
+# for temp_lat_long in latLongs:
+# 	tempForecast = forecast.daily_forecast_by_lat_lon(temp_lat_long[0], temp_lat_long[1])
+# 	all_the_forecasts.append(tempForecast)
 
 #I COULD POSSIBLY USE THIS TO RETURN READABLE DATA, FOR NOW, I SAY NO
 # for datapoint in tempForecast:
@@ -27,17 +27,17 @@ from noaa import utils
 #     print datapoint.conditions,
 #     print datapoint.min_temp.value,
 #     print datapoint.max_temp.value
-def getForecast(latitude, longitude):
+def get_forecast(latitude, longitude):
 	return forecast.daily_forecast_by_lat_lon(latitude, longitude)
 
 
-def getForecasts(latLongs):
-	allTheForecasts = []
+def get_forecasts(latLongs):
+	all_the_forecasts = []
 
-	for tempLatLong in latLongs:
-		tempForecast = forecast.daily_forecast_by_lat_lon(tempLatLong[0], tempLatLong[1])
-		allTheForecasts.append(tempForecast)
+	for temp_lat_long in latLongs:
+		tempForecast = forecast.daily_forecast_by_lat_lon(temp_lat_long[0], temp_lat_long[1])
+		all_the_forecasts.append(tempForecast)
 
-	return allTheForecasts
+	return all_the_forecasts
 
 # ADD A METHOD THAT CHECKS AN ARRAY/DB FOR REQUESTS IT HAS ALREADY PROCESSED WITHIN SOME TIME FRAME, AND JUST USE THOSE RESULTS

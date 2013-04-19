@@ -1,6 +1,9 @@
 from django.conf.urls import patterns, include, url
 from weather.views import index, camp
 
+from dajaxice.core import dajaxice_autodiscover, dajaxice_config
+dajaxice_autodiscover()
+
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
@@ -20,4 +23,7 @@ urlpatterns = patterns('',
     # (r'^(?P<zipcode>\d)/$', index),
     # (r'(?P<zipcode>\d)/', index),
     # (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/favicon.ico'}),
+
+    #ajax stuff below
+    url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
 )

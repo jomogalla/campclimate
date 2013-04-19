@@ -64,94 +64,99 @@
 </script>
 </head>
 <body>
-	<div id="page">
-		<div id="banner">
-			<form action="" method="get" class="smallForm">
-				{{ form.as_ul }}
-				<input type="submit" value="go" id="goButton" >
-			</form>
-			<div class="campgroundAmount">{{camplist_length|default:"No"}} campground{{camplist_length|pluralize}} returned</div>
-			<span id="infoToggle">more info</span> 
+	<div id="banner">
+		<form action="" method="get" class="smallForm">
+			{{ form.as_ul }}
+			<input type="submit" value="go" id="goButton" >
+		</form>
+		<span id="infoToggle">more info</span> 
+	</div>
+	<div id="content">
+		{% if notification %}
+		<div class="notification">
+			{{notification}}
 		</div>
+		{% endif %}
+		<div class="campgroundAmount">{{camplist_length|default:"No"}} campground{{camplist_length|pluralize}} returned</div>
+		{% if possibleCityList %}
+		<div id="possibleCities">
+			<ul>
+			{% for city in possibleCityList %}
+				<li>{{city.name}}, {{city.state}}	
+				{% if sameCities %}
+					- Population: {{city.population}}
+				{% endif %}
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+		{% endif %}
+		{% if farther %}
+		<div id="farther">
+			{{farther}}
+		</div>
+		{% endif %}
+		{% for infoBlob in zipped %}
+			<div class="infoBlob">
+				<div class="cityName">
+					{% load humanize %}
+					{{infoBlob.campground.name}}   
+					<span class="type">
+						{{infoBlob.campground.TYEP}}
+					</span>
+					<a class="googleMaps" target="_blank" href="https://maps.google.com/maps?q={{infoBlob.campground.latitude}},+{{infoBlob.campground.longitude}}" title="view on google maps"></a>
+					<span class="distance">
+						{{infoBlob.distance}} mile{{infoBlob.distance|pluralize}}
+					</span>
+					
+					<!-- <a href="https://maps.google.com/maps?q=37.771008,+-122.41175+(You+can+insert+your+text+here)&iwloc=A&hl=en"></a> -->
 
-		<p>
-		<div id="content">
-			<div class="notification">
-				{{notification}}
-			</div>
-			<div id="possibleCities">
-				<ul>
-				{% for city in possibleCityList %}
-					<li>{{city.name}}, {{city.state}}	
-					{% if sameCities %}
-						- Population: {{city.population}}
-					{% endif %}
-					</li>
-				{% endfor %}
-				</ul>
-			</div>
-			<div id="farther">
-				{{farther}}
-			</div>
-			{% for infoBlob in zipped %}
-				<div class="infoBlob">
-					<div class="cityName">
-						{% load humanize %}
-						{{infoBlob.campground.name}}   
-						<span class="type">
-							{{infoBlob.campground.TYEP}}
-						</span>
-						<a class="googleMaps" target="_blank" href="https://maps.google.com/maps?q={{infoBlob.campground.latitude}},+{{infoBlob.campground.longitude}}" title="view on google maps"></a>
-						<span class="distance">
-							{{infoBlob.distance}} mile{{infoBlob.distance|pluralize}}
-						</span>
-						
-						<!-- <a href="https://maps.google.com/maps?q=37.771008,+-122.41175+(You+can+insert+your+text+here)&iwloc=A&hl=en"></a> -->
+					
+				</div>
+<!-- 				<span class="cityDistance">
 
-						
-					</div>
-	<!-- 				<span class="cityDistance">
+				</span> -->
+				<div class="weatherRow">
+					{% for weatherBlob in infoBlob.weather %}
+						<div class="weatherBlob">
+							<div class="weatherDay">{{weatherBlob.day}}</div>
+							<div class="weatherDate"> {{weatherBlob.date}}</div>
+							<div class="weatherTemps">	High: {{weatherBlob.max_temp.value}} Low: {{weatherBlob.min_temp.value}}</div>
+							<div class="weatherConditions">{{weatherBlob.conditions}}</div>
 
-					</span> -->
-					<div class="weatherRow">
-						{% for weatherBlob in infoBlob.weather %}
-							<div class="weatherBlob">
-								<div class="weatherDay">{{weatherBlob.day}}</div>
-								<div class="weatherDate"> {{weatherBlob.date}}</div>
-								<div class="weatherTemps">	High: {{weatherBlob.max_temp.value}} Low: {{weatherBlob.min_temp.value}}</div>
-								<div class="weatherConditions">{{weatherBlob.conditions}}</div>
-
-							</div>
-						{% endfor %}
-					</div>
-					<div class="amenities">
-						<ul>
+						</div>
+					{% endfor %}
+				</div>
+				<div class="amenities">
+					<ul>
 						{% for amenity in infoBlob.campground.amenities %}
 							<li>{{amenity}}</li>
 						{% endfor %}
-						<li>{{infoBlob.campground.phone|default:"No Phone Listed"}} </li>
-						<li>{{infoBlob.campground.sites|default:"No Site Data"}} </li>
-						{%if infoBlob.campground.sites != '' %}
-							site{{infoBlob.campground.sites|pluralize}}
-						{% endif %} </li>
-						<li>{{infoBlob.campground.elevation|default:"No Elevation Data"}} 
-						{%if infoBlob.campground.elevation != '' %}
-							ft
-						{% endif %}</li>
-						</ul>
-					</div>
+						{% if infoBlob.campground.phone %}
+							<li>{{infoBlob.campground.phone}}</li>
+						{% endif %}
+						{% if infoBlob.campground.sites %}
+							<li>{{infoBlob.campground.sites}} site{{infoBlob.campground.sites|pluralize}}</li>
+						{% endif %}
+						{% if infoBlob.campground.elevation %}
+							<li>{{infoBlob.campground.elevation}} ft</li>
+						{% endif %}
+					</ul>
 				</div>
+			</div>
+			<div class="actualMap">
+				<iframe width="425" height="256" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{infoBlob.campground.latitude}},+{{infoBlob.campground.longitude}}&amp;ie=UTF8&amp;t=m&amp;ll={{infoBlob.campground.latitude}},{{infoBlob.campground.longitude}}&amp;spn=0.018261,0.036564&amp;z=14&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?q={{infoBlob.campground.latitude}},+{{infoBlob.campground.longitude}}&amp;ie=UTF8&amp;t=m&amp;ll={{infoBlob.campground.latitude}},{{infoBlob.campground.longitude}}&amp;spn=0.018261,0.036564&amp;z=14&amp;source=embed" style="color:#0000FF;text-align:left" target="_blank">View Larger Map</a></small>
+			</div>
+		{% endfor %}
+	</div>
+	<div id="spinner">
+		<img src="{{ STATIC_URL }}/static/images/spinTran						.gif" />
+	</div>
+	{% if debugSwitch %}
+		<div id="debug">
+			{% for debugText in debug %}
+				| {{debugText}}
 			{% endfor %}
 		</div>
-		<div id="spinner">
-			<img src="{{ STATIC_URL }}/static/images/spinTran						.gif" />
-		</div>
-		{% if debugSwitch %}
-			<div id="debug">
-				{% for debugText in debug %}
-					| {{debugText}}
-				{% endfor %}
-			</div>
-		{% endif %}
-	</div>
+	{% endif %}
 </body>
