@@ -1,0 +1,8 @@
+{% for weatherBlob in weather %}
+	<div class="weatherBlob {% if forloop.last %}last{% endif %}">
+		<div class="weatherDay">{{weatherBlob.day}}</div>
+		<div class="weatherDate"> {{weatherBlob.date}}</div>
+		<div class="weatherTemps">	High: {{weatherBlob.max_temp.value}} Low: {{weatherBlob.min_temp.value}}</div>
+		<div class="weatherConditions">{{weatherBlob.conditions}}</div>
+	</div>
+{% endfor %}
