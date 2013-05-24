@@ -41,7 +41,7 @@
 		});
 		// auto search from a city list
 		$('#possibleCities li').click(function(){
-			$('#id_location').val($(this).text())
+			$('#id_location').val($.trim($(this).text()))
 			$('#goButton').click();
 		});
 		//auto search further
@@ -77,7 +77,9 @@
 			{{notification}}
 		</div>
 		{% endif %}
-		<div class="campgroundAmount">{{camplist_length|default:"No"}} campground{{camplist_length|pluralize}} returned</div>
+		{% if not notification %}
+			<div class="campgroundAmount">{{camplist_length|default:"No"}} campground{{camplist_length|pluralize}} returned</div>
+		{% endif %}
 		{% if possibleCityList %}
 		<div id="possibleCities">
 			<ul>
@@ -143,9 +145,6 @@
 						{% endif %}
 					</ul>
 				</div>
-			</div>
-			<div class="actualMap">
-				<iframe width="425" height="256" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{infoBlob.campground.latitude}},+{{infoBlob.campground.longitude}}&amp;ie=UTF8&amp;t=m&amp;ll={{infoBlob.campground.latitude}},{{infoBlob.campground.longitude}}&amp;spn=0.018261,0.036564&amp;z=14&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?q={{infoBlob.campground.latitude}},+{{infoBlob.campground.longitude}}&amp;ie=UTF8&amp;t=m&amp;ll={{infoBlob.campground.latitude}},{{infoBlob.campground.longitude}}&amp;spn=0.018261,0.036564&amp;z=14&amp;source=embed" style="color:#0000FF;text-align:left" target="_blank">View Larger Map</a></small>
 			</div>
 		{% endfor %}
 	</div>

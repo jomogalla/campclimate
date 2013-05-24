@@ -1,10 +1,8 @@
-{% load dajaxice_templatetags %}
 <html>
 <head>
 	<title>camp climate</title>
 	<link rel="icon" type="image/icon" href="{{ STATIC_URL }}/static/images/favicon.ico" />
 	<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/static/styles_experiment.css">
-	{% dajaxice_js_import %}
 <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery-ui-1.9.2.custom.min.js"></script>
 <script type="text/javascript">
@@ -27,11 +25,35 @@
 		});
 		// fill right side up wiht the correct data
 		$(".camp").click(function(){
-			$('#rightDetails').html($('#latitude_' +  $(this).attr('id')).html() + ', ' + $('#longitude_' +  $(this).attr('id')).html()); 
+			// Grabbing hidden screen data
+			var latitude = $('#latitude_' +  $(this).attr('id')).html();
+			var longitude = $('#longitude_' +  $(this).attr('id')).html();
+			var campInfo = $('#details_' +  $(this).attr('id')).html();
+
+			// Grabbing visible screen data
+			var name = $(this).children('.cityName').html();
+			var type = $(this).children('.type').html();
+			var distance = $(this).children('.distance').html();
+
+			// Switch out the title & info
+			$('#campName').html(name);
+			$('#campType').html(type);
+			$('#campDistance').html(distance);
+			$('#rightDetails').html(campInfo);
+
+			// Switch out the map
+			$('#rightMap').html('<iframe width="600" height="250" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?q='+latitude+',+'+longitude+'&amp;hl=en&amp;ie=UTF8&amp;t=t&amp;ll='+latitude+','+ longitude +'&amp;spn=0.023746,0.051498&amp;z=12&amp;iwloc=z&amp;output=embed"></iframe><br /><small><a target="_blank" href="http://maps.google.com/maps?q='+ latitude+',+'+longitude+'&amp;hl=en&amp;ie=UTF8&amp;t=m&amp;ll='+ latitude +',' + longitude+'&amp;spn=0.023746,0.051498&amp;z=14&amp;iwloc=near&amp;source=embed" style="color:#0000FF;text-align:left">View Larger Map</a></small>');
+
+			//weather loading icon
+			$('#rightWeather').html('<img id="sunSpinner" src="{{ STATIC_URL }}/static/images/sun.gif" />');
+			//get weather
+			$.get('/weather/'+ latitude +'/' +  longitude +'/', function(data){
+				$('#rightWeather').html(data.weatherHTML);
+			});
 		});
 		// auto search from a city list
 		$('#possibleCities li').click(function(){
-			$('#id_location').val($(this).text())
+			$('#id_location').val($.trim($(this).text()));
 			$('#goButton').click();
 		});
 		//auto search further
@@ -45,7 +67,17 @@
 	}
 	function send_camp(){
 		// alert($(this).attr('id'));
-		// Dajaxice.weather.dajaxice_example(my_callback);
+		// var latitude = -111;
+		
+		var latitude = $('#latitude_' +  $(this).attr('id')).html();
+		// var longitude = 45;
+		var longitude = $('#longitude_' +  $(this).attr('id')).html();
+
+
+
+		// Dajaxice.weather.get_me_camp_info(my_callback);
+		Dajaxice.weather.get_me_weather(my_callback, {'latitude':latitude, 'longitude':longitude});
+		
 	}
 
 </script>
@@ -91,35 +123,43 @@
 					{{infoBlob.campground.TYEP}}
 				</span>
 			
-				<span class="distance">
+				<span class="distance" title="as the crow flies">
 					~{{infoBlob.distance}} mile{{infoBlob.distance|pluralize}}
 				</span>
+				<!-- QUESTION OF THE DAY: IS IT BETTER TO PUT THIS STUFF IN AN AJAX QUERY? OR JUST HIDE IT??? -->
 				<span id="latitude_{{forloop.counter0}}" class="hiddenData">{{infoBlob.campground.latitude}}</span>
 				<span id="longitude_{{forloop.counter0}}" class="hiddenData">{{infoBlob.campground.longitude}}</span>
-				
+				<span id="details_{{forloop.counter0}}" class="hiddenData">				
+					<ul>
+						{% for amenity in infoBlob.campground.amenities %}
+							<li>{{amenity}}</li>
+						{% endfor %}
+						{% if infoBlob.campground.phone %}
+							<li>{{infoBlob.campground.phone}}</li>
+						{% endif %}
+						{% if infoBlob.campground.sites %}
+							<li>{{infoBlob.campground.sites}} site{{infoBlob.campground.sites|pluralize}}</li>
+						{% endif %}
+						{% if infoBlob.campground.elevation %}
+							<li>{{infoBlob.campground.elevation}} ft</li>
+						{% endif %}
+					</ul>
+				</span>
 				<!-- <a href="https://maps.google.com/maps?q=37.771008,+-122.41175+(You+can+insert+your+text+here)&iwloc=A&hl=en"></a> -->	
 			</div>	
 		{% endfor %}
 		</div>
 		<div id="rightColumn">
 			<div id="rightTitle">
-				<span class="campName">{{zipped.0.campground.name}}   </span>
-				<span class="campDistance">	~{{zipped.0.distance}} mile{{zipped.0.distance|pluralize}}</span>
-				<div class="campType">	{{zipped.0.campground.TYEP}}</div>
+				<span id="campName" >{{zipped.0.campground.name}}   </span>
+				<span id="campDistance">	~{{zipped.0.distance}} mile{{zipped.0.distance|pluralize}}</span>
+				<div id="campType">	{{zipped.0.campground.TYEP}}</div>
 			</div>
 			<div id="rightMap">
-				<iframe width="600" height="250" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{zipped.0.campground.latitude}},+{{zipped.0.campground.longitude}}&amp;hl=en&amp;ie=UTF8&amp;t=t&amp;ll={{zipped.0.campground.latitude}},{{zipped.0.campground.longitude}}&amp;spn=0.023746,0.051498&amp;z=12&amp;iwloc=near&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?q={{zipped.0.campground.latitude}},+{{zipped.0.campground.longitude}}&amp;hl=en&amp;ie=UTF8&amp;t=m&amp;ll={{zipped.0.campground.latitude}},{{zipped.0.campground.longitude}}&amp;spn=0.023746,0.051498&amp;z=14&amp;iwloc=A&amp;source=embed" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+				<iframe width="600" height="250" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?q={{zipped.0.campground.latitude}},+{{zipped.0.campground.longitude}}&amp;hl=en&amp;ie=UTF8&amp;t=t&amp;ll={{zipped.0.campground.latitude}},{{zipped.0.campground.longitude}}&amp;spn=0.023746,0.051498&amp;z=12&amp;iwloc=z&amp;output=embed"></iframe><br /><small><a target="_blank" href="http://maps.google.com/maps?q={{zipped.0.campground.latitude}},+{{zipped.0.campground.longitude}}&amp;hl=en&amp;ie=UTF8&amp;t=m&amp;ll={{zipped.0.campground.latitude}},{{zipped.0.campground.longitude}}&amp;spn=0.023746,0.051498&amp;z=14&amp;iwloc=near&amp;source=embed" style="color:#0000FF;text-align:left">View Larger Map</a></small>
 			</div>
 			<div id="rightWeather">
-					{% for weatherBlob in zipped.0.weather %}
-						<div class="weatherBlob {% if forloop.last %}last{% endif %}">
-							<div class="weatherDay">{{weatherBlob.day}}</div>
-							<div class="weatherDate"> {{weatherBlob.date}}</div>
-							<div class="weatherTemps">	High: {{weatherBlob.max_temp.value}} Low: {{weatherBlob.min_temp.value}}</div>
-							<div class="weatherConditions">{{weatherBlob.conditions}}</div>
 
-						</div>
-					{% endfor %}
 			</div>
 			<div id="rightDetails">
 				<ul>
@@ -141,6 +181,6 @@
 	</div>
 
 	<div id="spinner">
-		<img src="{{ STATIC_URL }}/static/images/spinTran						.gif" />
+		<img src="{{ STATIC_URL }}/static/images/spinTran.gif" />
 	</div>
 </body>

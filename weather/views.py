@@ -12,6 +12,10 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from django.shortcuts import render_to_response
 
+from django.template.loader import render_to_string
+
+from django.utils import simplejson
+
 # from django.shortcuts import render_to_response
 # import models
 from models import City
@@ -113,6 +117,14 @@ def index(request):
 		form = WeatherForm()
 		return render_to_response('./index.html', {'form': form, 'debug':debug})
 
+def get_me_weather(request, latitude, longitude):
+	message = {"weatherHTML": ""}
+	if request.is_ajax():
+		forecast = oracle.get_forecast(latitude, longitude)
+		weatherHTML = render_to_string('./forecast.html', {'weather':forecast})
+		message['weatherHTML'] = weatherHTML
+		json = simplejson.dumps(message)
+		return HttpResponse(json, mimetype='application/json')
 
 def camp(request):
 	city_set = []
@@ -123,6 +135,108 @@ def camp(request):
 			max_distance = int(request.GET['distance'])
 			# debug.append('max_distance: ' + str(max_distance))
 			
+			# switch here to use either the city or the zipcode
+			if len(str(sample_zip)) == 5 and is_this_an_int(sample_zip):
+				try:
+					center_location = Zips.objects.get(zipcode=sample_zip)
+				except ObjectDoesNotExist:
+					notification = 'You sure that\'s a real zipcode?'
+					return render_to_response('./camp.html', {'form': form,'notification':notification})
+			else:
+				# assume we werent given a zipcode, so parse it as a city
+				parsed_zip = re.findall(r'\w+', sample_zip)
+				city_name = ' '.join(parsed_zip[0:-1])
+				state_name = parsed_zip[-1]
+
+				# BUG: searching for a city when there is another in the same state...possible major rewrite required to handle searching with extra data(no more jQuery hack)
+				try:
+					center_location = City.objects.get(name__iexact=city_name, state__iexact=state_name)
+				#in case we get nothing 
+				except ObjectDoesNotExist:
+					try:	
+						# concatenates the city and state name, if a city is two words, it mixes things up, this fixes that
+						if len(state_name) > 2 and len(city_name) != 0:
+							state_name = city_name + ' ' +state_name
+						possibleCityList = City.objects.filter(name__iexact=state_name)
+						if len(possibleCityList) != 0:
+							notification = 'I didn\'t catch the state. Here\'s a list of cities to start with: ' 
+							return render_to_response('./camp.html', {'form': form, 'notification':notification, 'possibleCityList':possibleCityList})
+						else:
+							notification = 'I can\'t find '
+							notification += state_name
+							return render_to_response('./camp.html', {'form': form, 'notification':notification})
+					except ObjectDoesNotExist:
+						notification = 'I can\'t seem to find that city'
+						return render_to_response('./camp.html', {'form': form,'notification':notification})
+				# in case we have two cities with the same name in the same state
+				except MultipleObjectsReturned:
+					# we get cities & populations but, cant specify the search based on the cities GEOid or location
+					possibleCityList = City.objects.filter(state__iexact=state_name).filter(name__iexact=city_name)
+					notification = 'I got multiple cities with that name: clicking these will just mess with things...sorry'
+					sameCities = True
+					return render_to_response('./camp.html', {'form': form,'notification':notification, 'sameCities':sameCities, 'possibleCityList':possibleCityList})
+				# Handling Non UTF data that python hates
+				except OperationalError:
+					notification = 'I\'ve encountered non-UTF data. And am notifying my superiors\n Sorry about this'
+					return render_to_response('./camp.html', {'form': form,'notification':notification})
+
+			# gives us a minimum and maximum to search in, it would look like a square centered around center_location
+			max_lat = center_location.latitude + max_distance/69.09
+			min_lat = center_location.latitude - max_distance/69.09
+			max_long = center_location.longitude + max_distance/69.09
+			min_long = center_location.longitude - max_distance/69.09
+
+			camp_set = list(Campground.objects.filter(longitude__range=(min_long,max_long)).filter(latitude__range=(min_lat,max_lat)))
+
+			# trim down the city list to a circle, and build the distance list
+			camp_distances = []
+			approvedcamp_set = []
+			for campground in camp_set:
+				temp_distance = calculate_distance(center_location, campground)
+
+				if temp_distance < float(max_distance):
+					approvedcamp_set.append(campground)
+					camp_distances.append(int(temp_distance))
+
+			#format the campground type to be human friendly
+			for campground in approvedcamp_set:
+				campground = camp_humanizer(campground)
+
+			all_the_forecasts = []
+			for campground in approvedcamp_set:
+				tempForecast = oracle.get_forecast(campground.latitude, campground.longitude)
+				#getting the day of the week for dates
+				for datapoint in tempForecast:
+					datapoint.day = datapoint.date.strftime('%A')
+				#add forecast to forecast list
+				all_the_forecasts.append(tempForecast)
+
+			zipped = [{'campground': t[0], 'weather': t[1], 'distance': t[2]} for t in zip(approvedcamp_set, all_the_forecasts, camp_distances)]
+
+			# no campgrounds were returned....
+			if len(approvedcamp_set) > 0:
+				return render_to_response('./camp.html', {"camplist_length":len(approvedcamp_set), 'forecasts':all_the_forecasts, 'form': form, 'zipped': zipped})
+			else:
+				notification = 'Search farther...'
+				return render_to_response('./camp.html', {'form': form,'farther':notification})
+		else:
+			form = WeatherForm(request.GET)
+			return render_to_response('./camp.html', {'form': form})
+
+	else:
+		form = WeatherForm()
+		return render_to_response('./camp.html', {'form': form})
+
+def camp_experiment(request):
+	city_set = []
+	if request.method == 'GET':
+		form = WeatherForm(request.GET)
+		if form.is_valid():
+			sample_zip = request.GET['location']
+			max_distance = int(request.GET['distance'])
+			
+			# BUG: JOHN DAY OR 35 --returns non utf data
+
 			# switch here to use either the city or the zipcode
 			if len(str(sample_zip)) == 5 and is_this_an_int(sample_zip):
 				try:
@@ -158,7 +272,7 @@ def camp(request):
 				except MultipleObjectsReturned:
 					# we get cities & populations but, cant specify the search based on the cities GEOid or location
 					possibleCityList = City.objects.filter(state__iexact=state_name).filter(name__iexact=city_name)
-					notification = 'I got multiple cities with that name: clicking these will just mess with things...sorry'
+					notification = 'I got multiple cities with that name beware: clicking these wont work'
 					sameCities = True
 					return render_to_response('./camp_experiment.html', {'form': form,'notification':notification, 'sameCities':sameCities, 'possibleCityList':possibleCityList})
 				# Handling Non UTF data that python hates
@@ -188,20 +302,19 @@ def camp(request):
 			for campground in approvedcamp_set:
 				campground = camp_humanizer(campground)
 
-			all_the_forecasts = []
-			for campground in approvedcamp_set:
-				tempForecast = oracle.get_forecast(campground.latitude, campground.longitude)
+			# all_the_forecasts = []
+			# for campground in approvedcamp_set:
+				# tempForecast = oracle.get_forecast(campground.latitude, campground.longitude)
 				#getting the day of the week for dates
-				for datapoint in tempForecast:
-					datapoint.day = datapoint.date.strftime('%A')
+				# for datapoint in tempForecast:
+					# datapoint.day = datapoint.date.strftime('%A')
 				#add forecast to forecast list
-				all_the_forecasts.append(tempForecast)
+				# all_the_forecasts.append(tempForecast)
 
-			zipped = [{'campground': t[0], 'weather': t[1], 'distance': t[2]} for t in zip(approvedcamp_set, all_the_forecasts, camp_distances)]
-			# zipped = [{'city': t[0], 'distance':t[1], 'weather': t[2]} for t in zip(city_set, city_distances, all_the_forecasts)]
-			# debug.append(str(len(city_set)) + ' cities')
+			zipped = [{'campground': t[0], 'distance': t[1]} for t in zip(approvedcamp_set, camp_distances)]
+			
 			if len(approvedcamp_set) > 0:
-				return render_to_response('./camp_experiment.html', {"camplist_length":len(approvedcamp_set), 'forecasts':all_the_forecasts, 'form': form, 'zipped': zipped})
+				return render_to_response('./camp_experiment.html', {"camplist_length":len(approvedcamp_set), 'form': form, 'zipped': zipped})
 			else:
 				notification = 'Search farther...'
 				return render_to_response('./camp_experiment.html', {'form': form,'farther':notification})
@@ -212,7 +325,6 @@ def camp(request):
 	else:
 		form = WeatherForm()
 		return render_to_response('./camp_experiment.html', {'form': form})
-
 
 
 def calculate_distance(cityA, cityB):
@@ -227,6 +339,7 @@ def is_this_an_int(s):
 	except ValueError:
 		return False
 
+# FUTURE UPDATE: create a reference dictionary, simplifying this ugly ifelifelifelifelif
 def camp_humanizer(campground):
 	# print campground.name
 	# US Federal Campgrounds
@@ -354,51 +467,3 @@ def camp_humanizer(campground):
 
 	campground.amenities = humanFriendlyAmenities
 
-
-# def calculate_distance(cityA, cityB):
-# 	from math import sin, radians, cos, acos, degrees
-# 	theDistance = (sin(radians(cityA.longitude)) * sin(radians(cityB.longitude)) +	cos(radians(cityA.longitude)) * cos(radians(cityB.longitude)) * cos(radians(cityB.latitude - cityA.latitude)))
-# 	return int(degrees(acos(theDistance)) * 69.09)
-
-	# sample_zip = 97306
-	# distance = 10
-
-	# center_location = Zips.objects.get(zipcode=sample_zip)
-	# max_lat = center_location.latitude + distance/69.09
-	# min_lat = center_location.latitude - distance/69.09
-	# max_long = center_location.longitude + distance/69.09
-	# min_long = center_location.longitude - distance/69.09
-
-	# squarecity_set = City.objects.filter(longitude__range=(min_lat,max_lat)).filter(latitude__range=(min_long,max_long))
-	# # t = loader.get_template('../templates/index.html')
-	# # c = Context({'city_list':squarecity_set,"center_lat":center_location.latitude, "max_lat":max_lat, "min_lat":min_lat, "citylist_length":len(squarecity_set), "forecasts":all_the_forecasts})
-	# # return HttpResponse(t.render(c))
-	# return render_to_response('../templates/index.html', {'city_list':squarecity_set,"citylist_length":len(squarecity_set), "forecasts":all_the_forecasts,})
-	# # return render_to_response('../templates/index.html', {'city_list':squarecity_set,"center_lat":center_location.latitude, "max_lat":max_lat, "min_lat":min_lat, "citylist_length":len(squarecity_set), "forecasts":all_the_forecasts})
-
-# HERE IS THE CODE FROM BETTERWEATHER THAT GETS THE CITIES, BITCH
-#for(int i = 0; i < cityBeans.size(); i++)
-# 	cityBeans.get(i).setDistance(calcDistance(centerLoc.getLatitude(), centerLoc.getLongitude(), cityBeans.get(i).getLatitude(), cityBeans.get(i).getLongitude()));
-# 	if(cityBeans.get(i).getDistance() > distance){
-# 		cityBeans.remove(i);
-# 	}
-# }
-	# private int calcDistance(double latA, double longA, double latB, double longB)
-		
-	# {
-	# 	//supposed to use earthradius in spherical law of cosines
-	# 	//but 69.09 is the general distance of a latitude in n. america
-	# 	//double earthRadius = 3959;
-	# 	//casting to the int below didnt cause the 0 values bug mentioned above
-
-	# 	//the spherical law of cosines
-	# 	double theDistance = (Math.sin(Math.toRadians(latA)) *
-	# 	Math.sin(Math.toRadians(latB)) +
-	# 	Math.cos(Math.toRadians(latA)) *
-	# 	Math.cos(Math.toRadians(latB)) *
-	# 	Math.cos(Math.toRadians(longB - longA)));
-	# 	return (int)(Math.toDegrees(Math.acos(theDistance)) * 69.09);
-		
-	# }
-
-	# http://www.uscampgrounds.info/default.html
